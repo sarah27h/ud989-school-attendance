@@ -1,84 +1,43 @@
-/* STUDENTS IGNORE THIS FUNCTION
- * All this does is create an initial
- * attendance record if one is not found
- * within localStorage.
- */
-(function() {
-    if (!localStorage.attendance) {
-        console.log('Creating attendance records...');
-        function getRandom() {
-            return (Math.random() >= 0.5);
-        }
+/* model */
+let model = {
+    studentNames : ["Slappy the Frog", "Lilly the Lizard", "Paulrus the Walrus", "Gregory the Goat", "Adam the Anaconda"],
+    
+    // Create attendance records, use local storage to store them
+    init: function() {
+        if (!localStorage.studentAttendance) {
+            console.log('Creating attendance records...');
 
-        var nameColumns = $('tbody .name-col'),
-            attendance = {};
-
-        nameColumns.each(function() {
-            var name = this.innerText;
-            attendance[name] = [];
-
-            for (var i = 0; i <= 11; i++) {
-                attendance[name].push(getRandom());
+            function getRandom() {
+                return (Math.random() >= 0.5);
             }
-        });
 
-        localStorage.attendance = JSON.stringify(attendance);
-    }
-}());
-
-
-/* STUDENT APPLICATION */
-$(function() {
-    var attendance = JSON.parse(localStorage.attendance),
-        $allMissed = $('tbody .missed-col'),
-        $allCheckboxes = $('tbody input');
-
-    // Count a student's missed days
-    function countMissing() {
-        $allMissed.each(function() {
-            var studentRow = $(this).parent('tr'),
-                dayChecks = $(studentRow).children('td').children('input'),
-                numMissed = 0;
-
-            dayChecks.each(function() {
-                if (!$(this).prop('checked')) {
-                    numMissed++;
+            // create studentAttendance object
+            const studentAttendance = {};
+            this.studentNames.map(function(name) {
+                // add studentsNames as its key
+                studentAttendance[name] = [];
+                
+                // fill values of studentAttendance object keys
+                // with random data
+                for (var i = 0; i <= 11; i++) {
+                    studentAttendance[name].push(getRandom());
                 }
+                return studentAttendance[name]
             });
 
-            $(this).text(numMissed);
-        });
+            // converts a studentAttendance object to a JSON string
+            // store studentAttendance JSON string
+            // {"Slappy the Frog":[false,false,...],"Lilly the Lizard":[false,true, ...],"Paulrus the Walrus":[true,false,true, ...],"Gregory the Goat":[true,true, ...],"Adam the Anaconda":[false,true, ...]}
+            localStorage.studentAttendance = JSON.stringify(studentAttendance);
+        }
+    },
+
+    getAttendanceData: function() {
+        // Parse a string (written in JSON) and return a JavaScript object
+        // {Slappy the Frog: [...], Lilly the Lizard: [...], Paulrus the Walrus: Array[...], Gregory the Goat: [...], Adam the Anaconda: [...]}
+        return JSON.parse(localStorage.studentAttendance);
     }
 
-    // Check boxes, based on attendace records
-    $.each(attendance, function(name, days) {
-        var studentRow = $('tbody .name-col:contains("' + name + '")').parent('tr'),
-            dayChecks = $(studentRow).children('.attend-col').children('input');
+    
+}
 
-        dayChecks.each(function(i) {
-            $(this).prop('checked', days[i]);
-        });
-    });
-
-    // When a checkbox is clicked, update localStorage
-    $allCheckboxes.on('click', function() {
-        var studentRows = $('tbody .student'),
-            newAttendance = {};
-
-        studentRows.each(function() {
-            var name = $(this).children('.name-col').text(),
-                $allCheckboxes = $(this).children('td').children('input');
-
-            newAttendance[name] = [];
-
-            $allCheckboxes.each(function() {
-                newAttendance[name].push($(this).prop('checked'));
-            });
-        });
-
-        countMissing();
-        localStorage.attendance = JSON.stringify(newAttendance);
-    });
-
-    countMissing();
-}());
