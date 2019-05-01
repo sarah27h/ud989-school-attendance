@@ -19,7 +19,7 @@ let model = {
                 
                 // fill values of studentAttendance object keys
                 // with random data
-                for (var i = 0; i <= 11; i++) {
+                for (let i = 0; i <= 11; i++) {
                     studentAttendance[name].push(getRandom());
                 }
                 return studentAttendance[name]
@@ -41,3 +41,45 @@ let model = {
     
 }
 
+
+/* octopus */
+
+let octopus = {
+    getStudentNames: function() {
+        // extract object keys
+         return Object.keys(model.getAttendanceData());
+    },
+
+    getStudentAttendance: function() {
+        let attendance = [];
+        // extract object values
+        for(let days in model.getAttendanceData()) {
+            attendance.push(model.getAttendanceData()[days]);
+        }
+        return attendance;
+    },
+
+    getMissedDays: function() {
+        const allDays = octopus.getStudentAttendance();
+        let allMissed = [],
+            missed = [];
+        console.log(allDays);
+        for(let i = 0; i < allDays.length; i++) {
+            missed[i] = allDays[i].filter(function(days){
+                
+                return days === false ;
+            });
+            allMissed.push(missed[i]);
+            console.log(allMissed)
+            return missed
+        }
+        
+        
+    },
+
+    init: function() {
+        model.init();
+    }
+}
+
+octopus.init();
