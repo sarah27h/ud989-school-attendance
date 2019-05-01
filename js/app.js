@@ -79,7 +79,70 @@ let octopus = {
 
     init: function() {
         model.init();
+        view.init();
     }
 }
 
+/* view */
+let view = {
+    init: function() {
+        this.tableBody = document.getElementById('table-body');
+        this.tableRows = document.getElementsByClassName('name-col');
+        console.log(this.tableRows);
+        console.log(this.tableBody);
+        this.render();
+    },
+
+    render: function() {
+        let tableBody = '';
+        let rows = 5;
+        let cols = 12;
+
+        // create table rows using DOM functions
+        // https://stackoverflow.com/questions/13775519/html-draw-table-using-innerhtml
+        for(let row = 1; row <= rows; row++) {
+            
+            // create rows
+            let tableRow = this.tableBody.insertRow();
+
+            // create days missed cells
+            let daysMissed = document.createTextNode('0')
+            let daysMissedCell = tableRow.insertCell(0);
+            daysMissedCell.setAttribute('class','missed-col');
+            daysMissedCell.appendChild(daysMissed);
+
+            // create checkbox cells
+            for(let col=1; col <= cols; col++){
+                let checkbox = document.createElement('input');
+                let checkCell = tableRow.insertCell(col-1);
+                checkCell.setAttribute('class','attend-col');
+                checkbox.setAttribute('type','checkbox');
+                checkCell.appendChild(checkbox);
+            }
+            // create student name cells
+            let studentName = document.createTextNode(`${octopus.getStudentNames()[row-1]}`);
+            let nameCell = tableRow.insertCell(0);
+            nameCell.setAttribute('class','name-col')
+            nameCell.appendChild(studentName);
+
+        }
+
+        // create table rows using a string to store the HTML
+        /* for(let row = 1; row <= rows; row++) {
+            console.log(row, Object.keys(model.getAttendanceData())[row-1])
+            tableBody += '<tr class="student">' +
+            '<td class="name-col">' + `${Object.keys(model.getAttendanceData())[row-1]}` +'</td>';
+            // create table repeated cols
+            for(let col = 1; col <= cols; col++) {
+                tableBody += '<td class="attend-col"><input type="checkbox"></td>'
+            }
+            
+            tableBody += '<td class="missed-col">0</td> </tr>'
+
+        }
+        this.tableBody.innerHTML = tableBody; */
+
+    }
+}
 octopus.init();
+octopus.getMissedDays();
