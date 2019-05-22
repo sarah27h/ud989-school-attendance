@@ -1,41 +1,48 @@
 /* model */
 let model = {
-    studentNames : ["Slappy the Frog", "Lilly the Lizard", "Paulrus the Walrus", "Gregory the Goat", "Adam the Anaconda"],
+    studentNames : ["Alice", "Lydia", "Adam", "Daniel", "Amy"],
     
-    // Create attendance records, use local storage to store them
+    // Create attendance records if it hasn't created yet, use local storage to store them
     init: function() {
-        if (!localStorage.studentAttendance) {
+        if (!localStorage.studentData) {
             console.log('Creating attendance records...');
 
+            /**
+            * @description Create random data for our student attendanceDyas
+            * @returns {boolean}
+            */
             function getRandom() {
                 return (Math.random() >= 0.5);
             }
 
-            // create studentAttendance object
-            const studentAttendance = {};
+            // create student object
+            const studentData = [];
             this.studentNames.map(function(name) {
-                // add studentsNames as its key
-                studentAttendance[name] = [];
-                
-                // fill values of studentAttendance object keys
-                // with random data
-                for (let i = 0; i <= 11; i++) {
-                    studentAttendance[name].push(getRandom());
+                const student = {};
+                // add student name, addendance days
+                student['name'] = name;
+                student['attendanceDyas'] = [];
+                // fill values of attendanceDyas array with random boolean data
+                for (let day = 1; day <= 12; day++) {
+                    student['attendanceDyas'].push(getRandom());
                 }
-                return studentAttendance[name]
+                // add student object to our array
+                studentData.push(student);
+                return studentData;
             });
 
             // converts a studentAttendance object to a JSON string
             // store studentAttendance JSON string
-            // {"Slappy the Frog":[false,false,...],"Lilly the Lizard":[false,true, ...],"Paulrus the Walrus":[true,false,true, ...],"Gregory the Goat":[true,true, ...],"Adam the Anaconda":[false,true, ...]}
-            localStorage.studentAttendance = JSON.stringify(studentAttendance);
+            // [{"name":"Alice","attendanceDyas":[false,true, ...]},{"name":"Lydia","attendanceDyas":[false,true, ...]},{"name":"Adam","attendanceDyas":[true,false, ...]},{"name":"Daniel","attendanceDyas":[false,true, ...]},{"name":"Amy","attendanceDyas":[true,false, ...]}]
+            localStorage.studentData = JSON.stringify(studentData);
         }
     },
 
     getAttendanceData: function() {
         // Parse a string (written in JSON) and return a JavaScript object
-        // {Slappy the Frog: [...], Lilly the Lizard: [...], Paulrus the Walrus: Array[...], Gregory the Goat: [...], Adam the Anaconda: [...]}
-        return JSON.parse(localStorage.studentAttendance);
+        // [{name:"Alice",attendanceDyas:[false,true, ...]},{name:"Lydia",attendanceDyas:[false,true, ...]},{name:"Adam",attendanceDyas:[true,false, ...]},{name:"Daniel",attendanceDyas:[false,true, ...]},{name:"Amy",attendanceDyas:[true,false, ...]}
+        console.log(JSON.parse(localStorage.studentData));
+        return JSON.parse(localStorage.studentData);
     }
 
     
