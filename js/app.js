@@ -96,35 +96,37 @@ let view = {
     render: function() {
         let tableBody = '';
         let rows = 5;
-        let cols = 12;
+        let cells = 12;
 
         // create table rows using DOM functions
         // https://stackoverflow.com/questions/13775519/html-draw-table-using-innerhtml
         for(let row = 1; row <= rows; row++) {
             
-            // create rows
-            let tableRow = this.tableBody.insertRow();
+            // create rows and begin at index 0
+            let tableRow = this.tableBody.insertRow(row-1);
 
-            // create days missed cells
-            let daysMissed = document.createTextNode('0')
-            let daysMissedCell = tableRow.insertCell(0);
-            daysMissedCell.setAttribute('class','missed-col');
-            daysMissedCell.appendChild(daysMissed);
+            // create student name cells
+            let studentName = document.createTextNode(`${octopus.getStudentNames()[row-1]}`);
+            let nameCell = tableRow.insertCell(0); // insert student name ex 'Slappy' at index 0
+            nameCell.setAttribute('class','name-col')
+            nameCell.appendChild(studentName);
 
             // create checkbox cells
-            for(let col=1; col <= cols; col++){
+            for(let cell=1; cell <= cells; cell++){
                 let checkbox = document.createElement('input');
-                let checkCell = tableRow.insertCell(col-1);
+                let checkCell = tableRow.insertCell(cell); // index equal to cell to insert cell index 1, 2, 3, ..., 12
                 checkCell.setAttribute('class','attend-col');
                 checkbox.setAttribute('type','checkbox');
                 checkCell.appendChild(checkbox);
             }
-            // create student name cells
-            let studentName = document.createTextNode(`${octopus.getStudentNames()[row-1]}`);
-            let nameCell = tableRow.insertCell(0);
-            nameCell.setAttribute('class','name-col')
-            nameCell.appendChild(studentName);
 
+            // create days missed cells
+            let daysMissed = document.createTextNode('0'); // all browsers support it equally without any quirks, it scape all HTML tags
+            let daysMissedCell = tableRow.insertCell(-1); // -1 to insert missed days cell at the last position
+            // daysMissedCell.innerHTML = '0 <span> gg </span>'; // render html-like tags into a DOM
+            daysMissedCell.setAttribute('class','missed-col');
+            daysMissedCell.appendChild(daysMissed);
+    
         }
 
         // create table rows using a string to store the HTML
@@ -138,7 +140,6 @@ let view = {
             }
             
             tableBody += '<td class="missed-col">0</td> </tr>'
-
         }
         this.tableBody.innerHTML = tableBody; */
 
