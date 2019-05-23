@@ -38,7 +38,7 @@ let model = {
         }
     },
 
-    getAttendanceData: function() {
+    getAllStudentData: function() {
         // Parse a string (written in JSON) and return a JavaScript object
         // [{name:"Alice",attendanceDyas:[false,true, ...]},{name:"Lydia",attendanceDyas:[false,true, ...]},{name:"Adam",attendanceDyas:[true,false, ...]},{name:"Daniel",attendanceDyas:[false,true, ...]},{name:"Amy",attendanceDyas:[true,false, ...]}
         console.log(JSON.parse(localStorage.studentData));
@@ -52,36 +52,9 @@ let model = {
 /* octopus */
 
 let octopus = {
-    getStudentNames: function() {
-        // extract object keys
-         return Object.keys(model.getAttendanceData());
-    },
-
-    getStudentAttendance: function() {
-        let attendance = [];
-        // extract object values
-        for(let days in model.getAttendanceData()) {
-            attendance.push(model.getAttendanceData()[days]);
-        }
-        return attendance;
-    },
-
-    getMissedDays: function() {
-        const allDays = octopus.getStudentAttendance();
-        let allMissed = [],
-            missed = [];
-        console.log(allDays);
-        for(let i = 0; i < allDays.length; i++) {
-            missed[i] = allDays[i].filter(function(days){
-                
-                return days === false ;
-            });
-            allMissed.push(missed[i]);
-            console.log(allMissed)
-            return missed
-        }
-        
-        
+    // get student data from model
+    getStudentData: function() {
+        return model.getAllStudentData();
     },
 
     init: function() {
@@ -113,7 +86,7 @@ let view = {
             let tableRow = this.tableBody.insertRow(row-1);
 
             // create student name cells
-            let studentName = document.createTextNode(`${octopus.getStudentNames()[row-1]}`);
+            let studentName = document.createTextNode(`${octopus.getStudentData()[row-1]['name']}`);
             let nameCell = tableRow.insertCell(0); // insert student name ex 'Slappy' at index 0
             nameCell.setAttribute('class','name-col')
             nameCell.appendChild(studentName);
@@ -124,6 +97,14 @@ let view = {
                 let checkCell = tableRow.insertCell(cell); // index equal to cell to insert cell index 1, 2, 3, ..., 12
                 checkCell.setAttribute('class','attend-col');
                 checkbox.setAttribute('type','checkbox');
+
+                // insert student attandance
+                // check boxes, based on attendace records
+                if (octopus.getStudentData()[row-1]['attendanceDyas'][cell-1] === true ){
+                    checkbox.setAttribute("checked", "");
+                } else if (octopus.getStudentData()[row-1]['attendanceDyas'][cell-1] === false) {
+                    checkbox.removeAttribute("checked");
+                }
                 checkCell.appendChild(checkbox);
             }
 
@@ -153,4 +134,3 @@ let view = {
     }
 }
 octopus.init();
-octopus.getMissedDays();
