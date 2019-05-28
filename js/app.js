@@ -44,7 +44,6 @@ let model = {
         console.log(JSON.parse(localStorage.studentData));
         return JSON.parse(localStorage.studentData);
     }
-
     
 }
 
@@ -55,6 +54,17 @@ let octopus = {
     // get student data from model
     getStudentData: function() {
         return model.getAllStudentData();
+    },
+
+    // count a student's missed days
+    getMissedDays: function() {
+        const missedDays = model.getAllStudentData().map((student) => {
+            return student['attendanceDyas'].filter((day) => {
+                return !day? !day : 0;
+            });
+        });
+        console.log(missedDays);
+        return missedDays;
     },
 
     init: function() {
@@ -109,7 +119,7 @@ let view = {
             }
 
             // create days missed cells
-            let daysMissed = document.createTextNode('0'); // all browsers support it equally without any quirks, it scape all HTML tags
+            let daysMissed = document.createTextNode(octopus.getMissedDays()[row-1].length); // all browsers support it equally without any quirks, it scape all HTML tags
             let daysMissedCell = tableRow.insertCell(-1); // -1 to insert missed days cell at the last position
             // daysMissedCell.innerHTML = '0 <span> gg </span>'; // render html-like tags into a DOM
             daysMissedCell.setAttribute('class','missed-col');
@@ -134,3 +144,5 @@ let view = {
     }
 }
 octopus.init();
+octopus.getMissedDays();
+console.log(model.getAllStudentData());
