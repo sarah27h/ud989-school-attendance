@@ -43,7 +43,15 @@ let model = {
         // [{name:"Alice",attendanceDyas:[false,true, ...]},{name:"Lydia",attendanceDyas:[false,true, ...]},{name:"Adam",attendanceDyas:[true,false, ...]},{name:"Daniel",attendanceDyas:[false,true, ...]},{name:"Amy",attendanceDyas:[true,false, ...]}
         console.log(JSON.parse(localStorage.studentData));
         return JSON.parse(localStorage.studentData);
+    },
+
+    updateStudentData: function(updatedArray) {
+        localStorage.studentData = JSON.stringify(updatedArray);
     }
+
+    // updateStudentData: function(updatedArray) {
+    //     localStorage.studentData = JSON.stringify(updatedArray);
+    // }
     
 }
 
@@ -67,6 +75,45 @@ let octopus = {
         return missedDays;
     },
 
+    // count missed days
+    addMissedDaysAsProperty: function() {
+        model.getAllStudentData().forEach((student, index, arr) => {
+            arr[index]['missedDays'] = 0
+            student['attendanceDyas'].map((day) => {
+
+                if (day === false) {
+                    student['missedDays']++;
+                }
+            });
+
+            console.log(student, arr);
+            // to update our array in local storage with new missedDays property
+            model.updateStudentData(arr);
+        });
+
+        // model.updateStudentData(model.getAllStudentData());
+        console.log(model.getAllStudentData());
+    },
+
+    // add a new property to clone
+    // addMissedDaysAsProperty: function() {
+    //     const clone = [...model.getAllStudentData()];
+    //     clone.forEach((student, index, arr) => {
+    //         arr[index]['missedDays'] = 0
+    //         student['attendanceDyas'].map((day) => {
+    //             if (day === false) {
+    //                 student['missedDays']++;
+    //             }
+    //         });
+           
+    //         console.log(student, student['missedDays']);
+            
+    //         // return student;
+    //     });
+    //     model.updateStudentData(clone);
+    //     console.log(clone, model.getAllStudentData());
+    // },
+
     init: function() {
         model.init();
         view.init();
@@ -80,7 +127,7 @@ let view = {
         this.tableRows = document.getElementsByClassName('name-col');
         console.log(this.tableRows);
         console.log(this.tableBody);
-        this.render();
+        view.render();
     },
 
     render: function() {
@@ -119,7 +166,7 @@ let view = {
             }
 
             // create days missed cells
-            let daysMissed = document.createTextNode(octopus.getMissedDays()[row-1].length); // all browsers support it equally without any quirks, it scape all HTML tags
+            let daysMissed = document.createTextNode(octopus.getMissedDays()[row-1].length); // all browsers support it equally without any quirks, it scape all HTML tags  
             let daysMissedCell = tableRow.insertCell(-1); // -1 to insert missed days cell at the last position
             // daysMissedCell.innerHTML = '0 <span> gg </span>'; // render html-like tags into a DOM
             daysMissedCell.setAttribute('class','missed-col');
@@ -144,5 +191,5 @@ let view = {
     }
 }
 octopus.init();
-octopus.getMissedDays();
+console.log(octopus.addMissedDaysAsProperty());
 console.log(model.getAllStudentData());
