@@ -49,15 +49,10 @@ let model = {
         localStorage.studentData = JSON.stringify(updatedArray);
     }
 
-    // updateStudentData: function(updatedArray) {
-    //     localStorage.studentData = JSON.stringify(updatedArray);
-    // }
-    
 }
 
 
 /* octopus */
-
 let octopus = {
     // get student data from model
     getStudentData: function() {
@@ -95,6 +90,25 @@ let octopus = {
         console.log(model.getAllStudentData());
     },
 
+    // update attendance days depends on checkboxs, update storage, render table view
+    updateAttendance: function(rowIndex, checkboxIndex) {
+
+        // loop through StudentData and by using rowIndex, recordIndex
+        // check which checkboxIndex changes to toggle it
+        model.getAllStudentData().forEach((student, recordIndex, students) => {
+            recordIndex === rowIndex? 
+            students[rowIndex]['attendanceDyas'][checkboxIndex] = !students[rowIndex]['attendanceDyas'][checkboxIndex] : 
+            students[rowIndex]['attendanceDyas'][checkboxIndex] = students[rowIndex]['attendanceDyas'][checkboxIndex];
+
+            // update our array in local storage with new missedDays property
+            model.updateStudentData(students);
+            console.log(students);
+        });
+
+        // render this view (update the DOM elements with the right values)
+        view.render();
+    },
+
     // add a new property to clone
     // addMissedDaysAsProperty: function() {
     //     const clone = [...model.getAllStudentData()];
@@ -120,13 +134,39 @@ let octopus = {
     }
 }
 
+
 /* view */
 let view = {
     init: function() {
+
         this.tableBody = document.getElementById('table-body');
+
+        // getElementsByClassName returns a live HTMLCollection.
+        // The little blue i in the console indicates that
+        // the array will be evaluated when you expand it.
         this.tableRows = document.getElementsByClassName('name-col');
         console.log(this.tableRows);
-        console.log(this.tableBody);
+        // you can listen to 'DOMContentLoaded'
+        // I have face a problem of it access any of this.tableRows HTML collection
+        // window.addEventListener('DOMContentLoaded', (event) => {
+        //     console.log(this.tableRows[1].innerText);
+        // });
+        
+        // on change, get cell, row index and pass to octopus to update
+        this.tableBody.addEventListener('change', function(e) {
+
+            // check if evt.target is input
+            if (e.target.nodeName.toLowerCase() === 'input') {
+                    let rowIndex = e.target.parentNode.parentNode.rowIndex - 1,
+                        checkboxIndex = e.target.parentNode.cellIndex - 1;
+                    console.log(e.target, 'change event');
+
+                    // pass attendanceRecordIndex, checkboxIndex to update student attendance
+                    octopus.updateAttendance(rowIndex, checkboxIndex);
+            }
+        });
+
+        // render table view
         view.render();
     },
 
@@ -134,6 +174,9 @@ let view = {
         let tableBody = '';
         let rows = 5;
         let cells = 12;
+
+        // clear table and render
+        this.tableBody.innerHTML = '';
 
         // create table rows using DOM functions
         // https://stackoverflow.com/questions/13775519/html-draw-table-using-innerhtml
@@ -187,9 +230,7 @@ let view = {
             tableBody += '<td class="missed-col">0</td> </tr>'
         }
         this.tableBody.innerHTML = tableBody; */
-
     }
 }
+
 octopus.init();
-console.log(octopus.addMissedDaysAsProperty());
-console.log(model.getAllStudentData());
