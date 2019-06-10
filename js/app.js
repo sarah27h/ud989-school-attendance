@@ -47,6 +47,19 @@ let model = {
 
     updateStudentData: function(updatedArray) {
         localStorage.studentData = JSON.stringify(updatedArray);
+    },
+
+    update: function(missed, index) {
+        let storageData = JSON.parse(localStorage.studentData);
+
+        storageData.forEach((student, i, array) => {
+            if (i === index) {
+                storageData[i]['missed'] = missed;
+                localStorage.studentData = JSON.stringify(storageData);
+            }
+            console.log('array', array);
+        });
+        console.log(model.getAllStudentData());
     }
 
 }
@@ -70,25 +83,47 @@ let octopus = {
         return missedDays;
     },
 
-    // count missed days
+    // count missed days and add as property using pass student index and missed
+    // and not whole array
     addMissedDaysAsProperty: function() {
         model.getAllStudentData().forEach((student, index, arr) => {
-            arr[index]['missedDays'] = 0
+            let missed = 0;
             student['attendanceDyas'].map((day) => {
 
                 if (day === false) {
-                    student['missedDays']++;
+                    missed++;
                 }
+                
             });
-
             console.log(student, arr);
             // to update our array in local storage with new missedDays property
-            model.updateStudentData(arr);
+            model.update(missed, index);
         });
-
-        // model.updateStudentData(model.getAllStudentData());
         console.log(model.getAllStudentData());
     },
+
+    /* count missed days and add as property using pass an array every time
+    // addMissedDaysAsProperty: function() {
+        
+    //     model.getAllStudentData().forEach((student, index, arr) => {
+    //         arr[index]['missedDays'] = 0;
+            
+    //         student['attendanceDyas'].map((day) => {
+
+    //             if (day === false) {
+    //                 student['missedDays']++;
+    //             }
+                
+    //         });
+
+    //         console.log(student, arr);
+    //         // to update our array in local storage with new missedDays property
+    //         model.updateStudentData(arr);
+    //     });
+
+    //     // model.updateStudentData(model.getAllStudentData());
+    //     console.log(model.getAllStudentData());
+    // }, */
 
     // update attendance days depends on checkboxs, update storage, render table view
     updateAttendance: function(rowIndex, checkboxIndex) {
@@ -100,8 +135,13 @@ let octopus = {
             students[rowIndex]['attendanceDyas'][checkboxIndex] = !students[rowIndex]['attendanceDyas'][checkboxIndex] : 
             students[rowIndex]['attendanceDyas'][checkboxIndex] = students[rowIndex]['attendanceDyas'][checkboxIndex];
 
-            // update our array in local storage with new missedDays property
+            // update our array in local storage with checkboxIndex toggle to update missed col
+            // in table view because missed col value calculate directly using model.getAllStudentData()
+            // student data from local storage
             model.updateStudentData(students);
+
+            // update our array in local storage with new missedDays property
+            octopus.addMissedDaysAsProperty();
             console.log(students);
         });
 
@@ -214,7 +254,6 @@ let view = {
             // daysMissedCell.innerHTML = '0 <span> gg </span>'; // render html-like tags into a DOM
             daysMissedCell.setAttribute('class','missed-col');
             daysMissedCell.appendChild(daysMissed);
-    
         }
 
         // create table rows using a string to store the HTML
