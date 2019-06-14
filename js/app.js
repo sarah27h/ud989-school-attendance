@@ -33,7 +33,7 @@ let model = {
 
             // converts a studentAttendance object to a JSON string
             // store studentAttendance JSON string
-            // [{"name":"Alice","attendanceDyas":[false,true, ...]},{"name":"Lydia","attendanceDyas":[false,true, ...]},{"name":"Adam","attendanceDyas":[true,false, ...]},{"name":"Daniel","attendanceDyas":[false,true, ...]},{"name":"Amy","attendanceDyas":[true,false, ...]}]
+            // "[{"name":"Alice","attendanceDyas":[false,true, ...]},{"name":"Lydia","attendanceDyas":[false,true, ...]},{"name":"Adam","attendanceDyas":[true,false, ...]},{"name":"Daniel","attendanceDyas":[false,true, ...]},{"name":"Amy","attendanceDyas":[true,false, ...]}]"
             localStorage.studentData = JSON.stringify(studentData);
         }
     },
