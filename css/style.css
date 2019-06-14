@@ -32,3 +32,13 @@ td.missed-col {
 .name-col {
     text-align: left;
 }
+
+/* media queries */
+/* for medium, small screens */
+@media screen and (max-width:774px) {
+    /* table container */
+    .cotained-table {
+        width: 100%;
+        overflow-x: auto;
+    }
+}
