@@ -8,7 +8,7 @@ let model = {
             console.log('Creating attendance records...');
 
             /**
-            * @description Create random data for our student attendanceDyas
+            * @description Create random data for our student attendanceDays
             * @returns {boolean}
             */
             function getRandom() {
@@ -21,10 +21,10 @@ let model = {
                 const student = {};
                 // add student name, addendance days
                 student['name'] = name;
-                student['attendanceDyas'] = [];
-                // fill values of attendanceDyas array with random boolean data
+                student['attendanceDays'] = [];
+                // fill values of attendanceDays array with random boolean data
                 for (let day = 1; day <= 12; day++) {
-                    student['attendanceDyas'].push(getRandom());
+                    student['attendanceDays'].push(getRandom());
                 }
                 // add student object to our array
                 studentData.push(student);
@@ -33,14 +33,14 @@ let model = {
 
             // converts a studentAttendance object to a JSON string
             // store studentAttendance JSON string
-            // "[{"name":"Alice","attendanceDyas":[false,true, ...]},{"name":"Lydia","attendanceDyas":[false,true, ...]},{"name":"Adam","attendanceDyas":[true,false, ...]},{"name":"Daniel","attendanceDyas":[false,true, ...]},{"name":"Amy","attendanceDyas":[true,false, ...]}]"
+            // "[{"name":"Alice","attendanceDays":[false,true, ...]},{"name":"Lydia","attendanceDays":[false,true, ...]},{"name":"Adam","attendanceDays":[true,false, ...]},{"name":"Daniel","attendanceDays":[false,true, ...]},{"name":"Amy","attendanceDays":[true,false, ...]}]"
             localStorage.studentData = JSON.stringify(studentData);
         }
     },
 
     getAllStudentData: function() {
         // Parse a string (written in JSON) and return a JavaScript object
-        // [{name:"Alice",attendanceDyas:[false,true, ...]},{name:"Lydia",attendanceDyas:[false,true, ...]},{name:"Adam",attendanceDyas:[true,false, ...]},{name:"Daniel",attendanceDyas:[false,true, ...]},{name:"Amy",attendanceDyas:[true,false, ...]}
+        // [{name:"Alice",attendanceDays:[false,true, ...]},{name:"Lydia",attendanceDays:[false,true, ...]},{name:"Adam",attendanceDays:[true,false, ...]},{name:"Daniel",attendanceDays:[false,true, ...]},{name:"Amy",attendanceDays:[true,false, ...]}
         console.log(JSON.parse(localStorage.studentData));
         return JSON.parse(localStorage.studentData);
     },
@@ -75,7 +75,7 @@ let octopus = {
     // count a student's missed days
     getMissedDays: function() {
         const missedDays = model.getAllStudentData().map((student) => {
-            return student['attendanceDyas'].filter((day) => {
+            return student['attendanceDays'].filter((day) => {
                 return !day? !day : 0;
             });
         });
@@ -88,7 +88,7 @@ let octopus = {
     addMissedDaysAsProperty: function() {
         model.getAllStudentData().forEach((student, index, arr) => {
             let missed = 0;
-            student['attendanceDyas'].map((day) => {
+            student['attendanceDays'].map((day) => {
 
                 if (day === false) {
                     missed++;
@@ -108,7 +108,7 @@ let octopus = {
     //     model.getAllStudentData().forEach((student, index, arr) => {
     //         arr[index]['missedDays'] = 0;
             
-    //         student['attendanceDyas'].map((day) => {
+    //         student['attendanceDays'].map((day) => {
 
     //             if (day === false) {
     //                 student['missedDays']++;
@@ -132,8 +132,8 @@ let octopus = {
         // check which checkboxIndex changes to toggle it
         model.getAllStudentData().forEach((student, recordIndex, students) => {
             recordIndex === rowIndex? 
-            students[rowIndex]['attendanceDyas'][checkboxIndex] = !students[rowIndex]['attendanceDyas'][checkboxIndex] : 
-            students[rowIndex]['attendanceDyas'][checkboxIndex] = students[rowIndex]['attendanceDyas'][checkboxIndex];
+            students[rowIndex]['attendanceDays'][checkboxIndex] = !students[rowIndex]['attendanceDays'][checkboxIndex] : 
+            students[rowIndex]['attendanceDays'][checkboxIndex] = students[rowIndex]['attendanceDays'][checkboxIndex];
 
             // update our array in local storage with checkboxIndex toggle to update missed col
             // in table view because missed col value calculate directly using model.getAllStudentData()
@@ -154,7 +154,7 @@ let octopus = {
     //     const clone = [...model.getAllStudentData()];
     //     clone.forEach((student, index, arr) => {
     //         arr[index]['missedDays'] = 0
-    //         student['attendanceDyas'].map((day) => {
+    //         student['attendanceDays'].map((day) => {
     //             if (day === false) {
     //                 student['missedDays']++;
     //             }
@@ -240,9 +240,9 @@ let view = {
 
                 // insert student attandance
                 // check boxes, based on attendace records
-                if (octopus.getStudentData()[row-1]['attendanceDyas'][cell-1] === true ){
+                if (octopus.getStudentData()[row-1]['attendanceDays'][cell-1] === true ){
                     checkbox.setAttribute("checked", "");
-                } else if (octopus.getStudentData()[row-1]['attendanceDyas'][cell-1] === false) {
+                } else if (octopus.getStudentData()[row-1]['attendanceDays'][cell-1] === false) {
                     checkbox.removeAttribute("checked");
                 }
                 checkCell.appendChild(checkbox);
