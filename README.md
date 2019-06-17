@@ -14,7 +14,7 @@ I have used the burn-it method because this code is very bad to be fixed, I have
 
 ## MVO
 
-(https://raw.githubusercontent.com/sarah27h/ud989-school-attendance/tree/mvo/MVO.png)
+![alt MVO](https://raw.githubusercontent.com/sarah27h/ud989-school-attendance/tree/mvo/MVO.png)
 
 ## Credits
 
