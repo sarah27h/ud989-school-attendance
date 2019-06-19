@@ -125,7 +125,7 @@ let octopus = {
     //     console.log(model.getAllStudentData());
     // }, */
 
-    // update attendance days depends on checkboxs, update storage, render table view
+    // update attendance days depends on checkboxs, update storage, render table tableBodyView
     updateAttendance: function(rowIndex, checkboxIndex) {
 
         // loop through StudentData and by using rowIndex, recordIndex
@@ -136,7 +136,7 @@ let octopus = {
             students[rowIndex]['attendanceDays'][checkboxIndex] = students[rowIndex]['attendanceDays'][checkboxIndex];
 
             // update our array in local storage with checkboxIndex toggle to update missed col
-            // in table view because missed col value calculate directly using model.getAllStudentData()
+            // in table tableBodyView because missed col value calculate directly using model.getAllStudentData()
             // student data from local storage
             model.updateStudentData(students);
 
@@ -145,8 +145,8 @@ let octopus = {
             console.log(students);
         });
 
-        // render this view (update the DOM elements with the right values)
-        view.render();
+        // render this tableBodyView (update the DOM elements with the right values)
+        tableBodyView.render();
     },
 
     // add a new property to clone
@@ -170,13 +170,13 @@ let octopus = {
 
     init: function() {
         model.init();
-        view.init();
+        tableBodyView.init();
     }
 }
 
 
-/* view */
-let view = {
+/* tableBodyView */
+let tableBodyView = {
     init: function() {
 
         this.tableBody = document.getElementById('table-body');
@@ -206,8 +206,8 @@ let view = {
             }
         });
 
-        // render table view
-        view.render();
+        // render table tableBodyView
+        tableBodyView.render();
     },
 
     render: function() {
