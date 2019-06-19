@@ -171,6 +171,44 @@ let octopus = {
     init: function() {
         model.init();
         tableBodyView.init();
+        tableHeaderView.init();
+    }
+}
+
+/* tableHeaderView */
+let tableHeaderView = {
+    init: function() {
+        this.studentTable = document.getElementById('student-table');
+
+        // render tableHeaderView
+        this.render();
+    },
+
+    render: function() {
+        // default days num
+        let cells = 12;
+        let tableHeader = this.studentTable.createTHead();
+        let headerRows = tableHeader.insertRow(0);
+
+        // create name cell in table header
+        let nameCell = document.createElement("th");
+        nameCell.appendChild(document.createTextNode('Student Name'));
+        nameCell.setAttribute('class', 'name-col');
+        headerRows.appendChild(nameCell);
+
+        // create days cell in table header
+        for(let cell = 1; cell <= cells; cell++) {
+            let daysCell = document.createElement("th");
+            daysCell.appendChild(document.createTextNode(`${cell}`));
+            daysCell.setAttribute('class', 'name-col');
+            headerRows.appendChild(daysCell);
+        }
+
+        // create missed days cell in table header
+        let missedDayscell = document.createElement("th");
+        missedDayscell.appendChild(document.createTextNode('Days Missed-col'));
+        missedDayscell.setAttribute('class', 'missed-col');
+        headerRows.appendChild(missedDayscell);
     }
 }
 
