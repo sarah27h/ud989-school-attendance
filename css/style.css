@@ -33,6 +33,28 @@ td.missed-col {
     text-align: left;
 }
 
+/* option view */
+#options-container {
+    margin-top: 20px;
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+}
+
+.option-btn {
+    font-size: 3.5em;
+    color: #ff6347;
+    border: 0;
+    background: transparent;
+    transition: all 1s;
+}
+
+.option-btn:hover {
+    font-size: 3.6em;
+    color: #d1371c;
+}
+
+
 /* media queries */
 /* for medium, small screens */
 @media screen and (max-width:774px) {

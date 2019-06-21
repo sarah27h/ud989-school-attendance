@@ -172,6 +172,7 @@ let octopus = {
         model.init();
         tableBodyView.init();
         tableHeaderView.init();
+        optionView.init();
     }
 }
 
@@ -307,6 +308,27 @@ let tableBodyView = {
             tableBody += '<td class="missed-col">0</td> </tr>'
         }
         this.tableBody.innerHTML = tableBody; */
+    }
+}
+
+
+/* options view */
+let optionView = {
+    createOption: function(icon) {
+        let optionIcon = document.createElement('button');
+        optionIcon.setAttribute('class', `option-btn fas fa-${icon}`);
+        return optionIcon;
+    },
+
+    init: function() {
+        this.optionsContainer = document.getElementById('options-container');
+
+        optionView.render();
+    },
+
+    render: function() {
+        this.optionsContainer.appendChild(optionView.createOption('calendar-day'));
+        this.optionsContainer.appendChild(optionView.createOption('user-plus'));
     }
 }
 
