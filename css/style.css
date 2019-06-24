@@ -18,6 +18,12 @@ input {
     cursor: pointer;
 }
 
+.container {
+    margin: 0 auto;
+    max-width: 852px;
+}
+
+
 /* Column types */
 th.missed-col {
     background-color: #f00;
