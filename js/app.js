@@ -178,6 +178,7 @@ let octopus = {
     tableBodyView.init();
     tableHeaderView.init();
     changeDaysNumView.init();
+    modalBoxView.init();
   }
 };
 
@@ -342,6 +343,51 @@ let changeDaysNumView = {
       this.modalBox.classList.add('show');
     });
     console.log(addStudentBtn);
+  }
+};
+
+/* modal box view */
+let modalBoxView = {
+  init: function() {
+    this.modalBox = document.getElementById('modal-box');
+    this.closeBtn = document.getElementsByClassName('modal-close-btn')[0];
+    this.cancelBtn = document.getElementsByClassName('secondary-btn')[0];
+    this.daysNumInput = document.getElementById('days-num');
+    this.addBtn = document.getElementsByClassName('primary-btn')[0];
+    // 'this' inside the event listener callback
+    // will be the element that fired the event which is 'closeBtn'
+    // this.closeBtn.addEventListener('click', this.closeModal);
+    // to solve that use bind() method to bind our function to modalBoxView
+    // this.closeBtn.addEventListener('click', this.closeModal.bind(modalBoxView));
+    // this.closeBtn.addEventListener('click', this.closeModal.bind(this));
+    // **********************************************************************
+    // or using arrow functions init: () => {...}, closeModal: () => {...}
+    // 'this' is looked up in scope just like a normal variable.
+    this.closeBtn.addEventListener('click', this.closeModal.bind(modalBoxView));
+    this.cancelBtn.addEventListener('click', this.closeModal.bind(modalBoxView));
+
+    // listen for user input
+    this.daysNumInput.addEventListener('change', e => {
+      let daysNum = e.target.value;
+      this.addBtn.addEventListener('click', () => {
+        console.log(daysNum);
+      });
+    });
+
+    console.log(this);
+
+    window.addEventListener('click', evt => {
+      if (evt.target === this.modalBox) {
+        console.log(evt.target);
+        modalBoxView.closeModal();
+      }
+    });
+  },
+
+  closeModal: function() {
+    console.log(this);
+    this.modalBox.classList.remove('show');
+    this.modalBox.classList.add('hidden');
   }
 };
 
