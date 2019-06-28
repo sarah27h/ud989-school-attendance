@@ -359,11 +359,9 @@ let modalBoxView = {
     // to solve that use bind() method to bind our function to modalBoxView
     // this.closeBtn.addEventListener('click', this.closeModal.bind(modalBoxView));
     // this.closeBtn.addEventListener('click', this.closeModal.bind(this));
-    // **********************************************************************
-    // or using arrow functions init: () => {...}, closeModal: () => {...}
-    // 'this' is looked up in scope just like a normal variable.
-    this.closeBtn.addEventListener('click', this.closeModal.bind(modalBoxView));
-    this.cancelBtn.addEventListener('click', this.closeModal.bind(modalBoxView));
+
+    this.closeBtn.addEventListener('click', this.closeModal.bind(this));
+    this.cancelBtn.addEventListener('click', this.closeModal.bind(this));
     // listen for user input
     this.daysNumInput.addEventListener('change', e => {
       let daysNum = e.target.value;
@@ -382,7 +380,7 @@ let modalBoxView = {
     });
   },
 
-  closeModal: function() {
+  closeModal: () => {
     console.log(this);
     this.modalBox.classList.remove('show');
     this.modalBox.classList.add('hidden');
