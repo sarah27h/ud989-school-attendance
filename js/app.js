@@ -177,7 +177,7 @@ let octopus = {
     model.init();
     tableBodyView.init();
     tableHeaderView.init();
-    changeDaysNumView.init();
+    changeDaysNumModal.init();
     modalBoxView.init();
   }
 };
@@ -320,7 +320,7 @@ let tableBodyView = {
 };
 
 /* options view */
-let changeDaysNumView = {
+let changeDaysNumModal = {
   createOption: function(type, icon) {
     let optionIcon = document.createElement('button');
     optionIcon.setAttribute('class', `option-btn ${type}-btn fas fa-${icon}`);
@@ -330,19 +330,18 @@ let changeDaysNumView = {
   init: function() {
     this.optionsContainer = document.getElementById('options-container');
     this.modalBox = document.getElementById('modal-box');
-    changeDaysNumView.render();
+    changeDaysNumModal.render();
   },
 
   render: function() {
     this.optionsContainer.appendChild(
-      changeDaysNumView.createOption('add', 'calendar-day')
+      changeDaysNumModal.createOption('change', 'calendar-day')
     );
-    let addStudentBtn = document.getElementsByClassName('add-btn')[0];
-    addStudentBtn.addEventListener('click', () => {
+    let changeDaysBtn = document.getElementsByClassName('change-btn')[0];
+    changeDaysBtn.addEventListener('click', () => {
       this.modalBox.classList.remove('hidden');
       this.modalBox.classList.add('show');
     });
-    console.log(addStudentBtn);
   }
 };
 
@@ -351,9 +350,9 @@ let modalBoxView = {
   init: function() {
     this.modalBox = document.getElementById('modal-box');
     this.closeBtn = document.getElementsByClassName('modal-close-btn')[0];
-    this.cancelBtn = document.getElementsByClassName('secondary-btn')[0];
-    this.daysNumInput = document.getElementById('days-num');
-    this.addBtn = document.getElementsByClassName('primary-btn')[0];
+    this.cancelBtn = document.getElementsByClassName('secondary-btn')[1];
+    this.daysNumInput = document.getElementById('days');
+    this.addBtn = document.getElementsByClassName('primary-btn')[2];
     // 'this' inside the event listener callback
     // will be the element that fired the event which is 'closeBtn'
     // this.closeBtn.addEventListener('click', this.closeModal);
@@ -365,7 +364,6 @@ let modalBoxView = {
     // 'this' is looked up in scope just like a normal variable.
     this.closeBtn.addEventListener('click', this.closeModal.bind(modalBoxView));
     this.cancelBtn.addEventListener('click', this.closeModal.bind(modalBoxView));
-
     // listen for user input
     this.daysNumInput.addEventListener('change', e => {
       let daysNum = e.target.value;
