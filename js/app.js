@@ -359,7 +359,14 @@ let modalBoxView = {
     // to solve that use bind() method to bind our function to modalBoxView
     // this.closeBtn.addEventListener('click', this.closeModal.bind(modalBoxView));
     // this.closeBtn.addEventListener('click', this.closeModal.bind(this));
-
+    //***************************************************************
+    // or using arrow functions
+    // arrow function simply capture the this of the surrounding scope.
+    // value of 'this' inside an arrow function is determined by
+    // where the arrow function is defined, not where it is used.
+    // () => this.closeModal() binds the context lexically with the modalBoxView object.
+    // this.closeBtn.addEventListener('click', () => this.closeModal());
+    // this.cancelBtn.addEventListener('click', () => this.closeModal());
     this.closeBtn.addEventListener('click', this.closeModal.bind(this));
     this.cancelBtn.addEventListener('click', this.closeModal.bind(this));
     // listen for user input
@@ -380,7 +387,17 @@ let modalBoxView = {
     });
   },
 
-  closeModal: () => {
+  // closeModal: ()  => {...}
+  // "Arrow functions have no concept of 'this'.
+  // 'this' inside of an arrow function is whatever 'this' is in their containing lexical environment.
+  // *********
+  // Don't use arrow functions if you need to bind the value of this.
+  // *********
+  // value of 'this' inside an arrow function is determined by
+  // where the arrow function is defined, not where it is used.
+  // closeModal: ()  => {...} binds the context lexically with the window object.
+  // use normal functions instead as callbacks.
+  closeModal: function() {
     console.log(this);
     this.modalBox.classList.remove('show');
     this.modalBox.classList.add('hidden');
