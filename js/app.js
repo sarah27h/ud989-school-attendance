@@ -77,6 +77,13 @@ let octopus = {
     return model.daysNum;
   },
 
+  //update daysNum
+  updateDaysNum: function(enteredDaysNum) {
+    model.daysNum = enteredDaysNum;
+    tableHeaderView.render();
+    tableBodyView.render();
+  },
+
   // count a student's missed days
   getMissedDays: function() {
     const missedDays = model.getAllStudentData().map(student => {
@@ -343,17 +350,21 @@ let changeDaysNumView = {
     // on change, get new value
     this.daysNumInput.addEventListener('change', function(e) {
       let enteredDaysNum = e.target.value;
-      console.log(enteredDaysNum);
+      octopus.updateDaysNum(enteredDaysNum);
     });
 
     // on click, decrease daysNumInput value by 1
+    // update daysNum in model using octopus.updateDaysNum()
     this.subtractBtn.addEventListener('click', () => {
       this.daysNumInput.value--;
+      octopus.updateDaysNum(this.daysNumInput.value);
     });
 
     // on click, increase daysNumInput value by 1
+    // update daysNum in model using octopus.updateDaysNum()
     this.increaseBtn.addEventListener('click', () => {
       this.daysNumInput.value++;
+      octopus.updateDaysNum(this.daysNumInput.value);
     });
   },
 
