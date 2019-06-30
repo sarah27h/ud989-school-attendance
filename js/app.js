@@ -179,6 +179,7 @@ let octopus = {
     tableHeaderView.init();
     changeDaysNumModal.init();
     modalBoxView.init();
+    changeDaysNumView.init();
   }
 };
 
@@ -267,9 +268,7 @@ let tableBodyView = {
       let tableRow = this.tableBody.insertRow(row - 1);
 
       // create student name cells
-      let studentName = document.createTextNode(
-        `${octopus.getStudentData()[row - 1]['name']}`
-      );
+      let studentName = document.createTextNode(`${octopus.getStudentData()[row - 1]['name']}`);
       let nameCell = tableRow.insertCell(0); // insert student name ex 'Slappy' at index 0
       nameCell.setAttribute('class', 'name-col');
       nameCell.appendChild(studentName);
@@ -285,18 +284,14 @@ let tableBodyView = {
         // check boxes, based on attendace records
         if (octopus.getStudentData()[row - 1]['attendanceDays'][cell - 1] === true) {
           checkbox.setAttribute('checked', '');
-        } else if (
-          octopus.getStudentData()[row - 1]['attendanceDays'][cell - 1] === false
-        ) {
+        } else if (octopus.getStudentData()[row - 1]['attendanceDays'][cell - 1] === false) {
           checkbox.removeAttribute('checked');
         }
         checkCell.appendChild(checkbox);
       }
 
       // create days missed cells
-      let daysMissed = document.createTextNode(
-        octopus.getMissedDays()[row - 1].length
-      ); // all browsers support it equally without any quirks, it scape all HTML tags
+      let daysMissed = document.createTextNode(octopus.getMissedDays()[row - 1].length); // all browsers support it equally without any quirks, it scape all HTML tags
       let daysMissedCell = tableRow.insertCell(-1); // -1 to insert missed days cell at the last position
       // daysMissedCell.innerHTML = '0 <span> gg </span>'; // render html-like tags into a DOM
       daysMissedCell.setAttribute('class', 'missed-col');
@@ -320,6 +315,55 @@ let tableBodyView = {
 };
 
 /* options view */
+let changeDaysNumView = {
+  init: function() {
+    this.changeDaysNumBtn = document.getElementsByClassName('change-days-btn')[0];
+    this.daysView = document.getElementById('days-view');
+    this.closeOption = document.getElementsByClassName('option-close-btn')[0];
+    this.daysNumInput = document.getElementById('days-num');
+    this.subtractBtn = document.getElementById('subtract-btn');
+    this.increaseBtn = document.getElementById('increase-btn');
+
+    // 'this' inside the event listener callback
+    // will be the element that fired the event which is 'closeBtn'
+    // this.closeBtn.addEventListener('click', this.closeModal);
+    // to solve that use bind() method to bind our function to modalBoxView
+    // this.closeOption.addEventListener('click', this.toggleOptionView.bind(this));
+    //***************************************************************
+    // or using arrow functions
+    // arrow function simply capture the 'this' of the surrounding scope.
+    // value of 'this' inside an arrow function is determined by
+    // where the arrow function is defined, not where it is used.
+    // () => this.closeModal() binds the context lexically with the modalBoxView object.
+    // this.closeBtn.addEventListener('click', () => this.toggleOptionView());
+    // this.cancelBtn.addEventListener('click', () => this.toggleOptionView());
+    this.changeDaysNumBtn.addEventListener('click', this.toggleOptionView.bind(this));
+    this.closeOption.addEventListener('click', this.toggleOptionView.bind(this));
+
+    // on change, get new value
+    this.daysNumInput.addEventListener('change', function(e) {
+      let enteredDaysNum = e.target.value;
+      console.log(enteredDaysNum);
+    });
+
+    // on click, decrease daysNumInput value by 1
+    this.subtractBtn.addEventListener('click', () => {
+      this.daysNumInput.value--;
+    });
+
+    // on click, increase daysNumInput value by 1
+    this.increaseBtn.addEventListener('click', () => {
+      this.daysNumInput.value++;
+    });
+  },
+
+  // used to open, close optionView
+  toggleOptionView: function() {
+    this.daysView.classList.toggle('hidden');
+    this.daysView.classList.toggle('display-flex');
+  }
+};
+
 let changeDaysNumModal = {
   createOption: function(type, icon) {
     let optionIcon = document.createElement('button');
@@ -334,9 +378,7 @@ let changeDaysNumModal = {
   },
 
   render: function() {
-    this.optionsContainer.appendChild(
-      changeDaysNumModal.createOption('change', 'calendar-day')
-    );
+    this.optionsContainer.appendChild(changeDaysNumModal.createOption('change', 'calendar-day'));
     let changeDaysBtn = document.getElementsByClassName('change-btn')[0];
     changeDaysBtn.addEventListener('click', () => {
       this.modalBox.classList.remove('hidden');
