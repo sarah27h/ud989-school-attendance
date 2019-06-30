@@ -25,6 +25,74 @@
       </div>
 
       <div id="options-container"></div>
+
+      <!-- add student, update, help view -->
+      <div id="options">
+        <!-- change days num view -->
+        <div class="option-view">
+          <button class="option-btn change-days-btn fas fa-calendar-day"></button>
+          <div class="option-content hidden" id="days-view">
+            <i class="fas fa-caret-up"></i>
+            <div class="option-header">
+              <h5>Change Days Number</h5>
+            </div>
+            <div class="option-body">
+              <label for="days-num">Days Number</label>
+              <input id="days-num" type="number" value="12" placeholder="12" />
+            </div>
+            <div class="option-footer">
+              <button id="subtract-btn" class="btn secondary-btn">-</button>
+              <button id="increase-btn" class="btn primary-btn">+</button>
+            </div>
+            <div class="option-close">
+              <i class="fas option-close-btn fa-chevron-circle-up"></i>
+            </div>
+          </div>
+        </div>
+        <!-- end change days num view -->
+
+        <!-- add student view -->
+        <div class="option-view">
+          <button class="option-btn add-btn fas fa-user-plus"></button>
+          <div class="option-content hidden" id="add-student-view">
+            <i class="fas fa-caret-up"></i>
+            <div class="option-header">
+              <h5>Add New Student</h5>
+            </div>
+            <div class="option-body">
+              <label for="student-name">Student Name</label>
+              <input id="student-name" type="text" placeholder="Enter student name" />
+            </div>
+            <div class="option-footer">
+              <button class="btn primary-btn">Add Student</button>
+            </div>
+            <div class="option-close">
+              <i class="fas btn fa-chevron-circle-up"></i>
+            </div>
+          </div>
+        </div>
+        <!-- end add student view -->
+
+        <!-- help view -->
+        <div class="option-view">
+          <button class="option-btn help-btn fas fa-question-circle"></button>
+          <div class="option-content hidden" id="help-view">
+            <i class="fas fa-caret-up"></i>
+            <div class="option-header">
+              <h5>Help</h5>
+            </div>
+            <div class="option-body">
+              help to know how app works
+            </div>
+            <div class="option-footer"></div>
+            <div class="option-close">
+              <i class="fas btn fa-chevron-circle-up"></i>
+            </div>
+          </div>
+        </div>
+        <!-- end help view -->
+      </div>
+      <!-- end add student, update, help view -->
     </div>
 
     <!-- modal -->
@@ -36,8 +104,8 @@
           <i class="fas fa-times-circle modal-close-btn"></i>
         </div>
         <div class="modal-body">
-          <label for="days-num">Days Number</label>
-          <input id="days-num" type="number" placeholder="Ex: 15" />
+          <label for="days">Days Number</label>
+          <input id="days" type="number" placeholder="Ex: 15" />
         </div>
         <div class="modal-footer">
           <button class="btn secondary-btn">cancel</button>

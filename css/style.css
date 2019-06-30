@@ -31,6 +31,10 @@ input {
   display: block; /* show */
 }
 
+.display-flex {
+  display: flex; /* show */
+}
+
 .btn {
   padding: 10px 20px;
   border: none;
@@ -83,6 +87,90 @@ td.missed-col {
 
 .option-btn:hover {
   color: #d1371c;
+}
+
+/* options */
+#options {
+  display: flex;
+  justify-content: space-between;
+}
+
+.option-view {
+}
+
+.option-content {
+  position: relative;
+  flex-wrap: wrap;
+  width: 250px;
+  background-color: #f0eeee;
+  margin: 20px 10px 20px 0;
+  padding: 0 2px;
+  /* border: 1px solid #888; */
+  max-width: 400px;
+  color: #636363;
+}
+
+.option-content .fa-caret-up {
+  position: absolute;
+  top: -19px;
+  left: 22px;
+  font-size: 30px;
+  color: #f0eeee;
+}
+
+.option-header {
+  display: flex;
+  width: 100%;
+  border-bottom: 1px solid #ddd;
+  padding: 16px;
+}
+
+.option-header h5 {
+  margin: 0;
+  font-size: 20px;
+}
+
+.option-body {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  padding: 30px 0;
+  justify-content: space-between;
+  /* items are centered in the cross-axis */
+  align-items: center;
+  padding: 16px;
+}
+
+.option-body input {
+  padding: 10px 20px;
+  width: 100%;
+  margin-top: 10px;
+}
+
+.option-body input[type='number'] {
+  padding: 10px 20px;
+  width: 50px;
+}
+
+.option-footer {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  border-top: 1px solid #ddd;
+  padding: 16px;
+}
+
+.option-close {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  padding: 6px;
+  border-top: 1px solid #ddd;
+}
+
+.option-close i {
+  font-size: 33px;
+  color: #000;
 }
 
 /* modal */
