@@ -194,16 +194,22 @@ let octopus = {
 let tableHeaderView = {
   init: function() {
     this.studentTable = document.getElementById('student-table');
+    this.tableHeader = document.getElementById('table-thead');
 
     // render tableHeaderView
-    this.render();
+    tableHeaderView.render();
   },
 
   render: function() {
     // default days num
     let cells = octopus.getDaysNum();
-    let tableHeader = this.studentTable.createTHead();
-    let headerRows = tableHeader.insertRow(0);
+
+    // clear table and render
+    this.tableHeader.innerHTML = '';
+
+    // create rows and begin at index 0
+    let headerRows = this.tableHeader.insertRow(0);
+    console.log(this.tableHeader);
 
     // create name cell in table header
     let nameCell = document.createElement('th');
