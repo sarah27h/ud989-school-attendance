@@ -80,6 +80,7 @@ let octopus = {
   //update daysNum
   updateDaysNum: function(enteredDaysNum) {
     model.daysNum = enteredDaysNum;
+    octopus.countMissed();
     tableHeaderView.render();
     tableBodyView.render();
   },
@@ -93,6 +94,13 @@ let octopus = {
     });
     console.log(missedDays);
     return missedDays;
+  },
+
+  countMissed: function() {
+    model.getAllStudentData().map((student, index, students) => {
+      student['attendanceDays'].length = model.daysNum;
+      model.updateStudentData(students);
+    });
   },
 
   // count missed days and add as property using pass student index and missed
