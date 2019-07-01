@@ -2,8 +2,6 @@
 let model = {
   studentNames: ['Alice', 'Lydia', 'Adam', 'Daniel', 'Amy'],
 
-  // days num default 12
-  daysNum: 12,
   // Create attendance records if it hasn't created yet, use local storage to store them
   init: function() {
     if (!localStorage.studentData) {
@@ -25,19 +23,30 @@ let model = {
         student['name'] = name;
         student['attendanceDays'] = [];
         // fill values of attendanceDays array with random boolean data
-        for (let day = 1; day <= model.daysNum; day++) {
+        for (let day = 1; day <= 12; day++) {
           student['attendanceDays'].push(getRandom());
         }
         // add student object to our array
         studentData.push(student);
         return studentData;
       });
+      // add daysNum in localStorage
+      localStorage.setItem('daysNum', '12');
 
       // converts a studentAttendance object to a JSON string
       // store studentAttendance JSON string
       // "[{"name":"Alice","attendanceDays":[false,true, ...]},{"name":"Lydia","attendanceDays":[false,true, ...]},{"name":"Adam","attendanceDays":[true,false, ...]},{"name":"Daniel","attendanceDays":[false,true, ...]},{"name":"Amy","attendanceDays":[true,false, ...]}]"
       localStorage.studentData = JSON.stringify(studentData);
     }
+  },
+
+  // daysNum from localStorage
+  getDaysNumFromStorage: function() {
+    return JSON.parse(localStorage.daysNum);
+  },
+
+  updateDaysNumInStorage: function(newDaysNum) {
+    localStorage.daysNum = JSON.stringify(newDaysNum);
   },
 
   getAllStudentData: function() {
@@ -72,15 +81,20 @@ let octopus = {
     return model.getAllStudentData();
   },
 
-  // get daysNum from model
+  // daysNum need to reflect user input
   getDaysNum: function() {
-    return model.daysNum;
+    return model.getDaysNumFromStorage();
   },
 
   //update daysNum
   updateDaysNum: function(enteredDaysNum) {
-    model.daysNum = enteredDaysNum;
-    octopus.countMissed();
+    // count missed days column after changing daysNum
+    octopus.updateMissedColumn(enteredDaysNum);
+
+    // update daysNum in localStorage
+    model.updateDaysNumInStorage(enteredDaysNum);
+
+    // update the DOM elements with the right values
     tableHeaderView.render();
     tableBodyView.render();
   },
@@ -96,9 +110,15 @@ let octopus = {
     return missedDays;
   },
 
-  countMissed: function() {
+  // count missed days after changing daysNum
+  // missed days => count 'false' in student['attendanceDays']
+  // after changing daysNum
+  // student['attendanceDays'] length needs to be updated
+  // to reflect changing occur in daysNum
+  // to save changes in student data -> update localstorage
+  updateMissedColumn: function(enteredDaysNum) {
     model.getAllStudentData().map((student, index, students) => {
-      student['attendanceDays'].length = model.daysNum;
+      student['attendanceDays'].length = enteredDaysNum;
       model.updateStudentData(students);
     });
   },
