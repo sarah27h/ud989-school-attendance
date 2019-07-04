@@ -365,6 +365,10 @@ let changeDaysNumView = {
     this.subtractBtn = document.getElementById('subtract-btn');
     this.increaseBtn = document.getElementById('increase-btn');
 
+    // set daysNumInput value to be always days num
+    // to improve UX every time user want to change days num stop at the last time days num
+    this.daysNumInput.setAttribute('value', octopus.getDaysNum());
+
     // 'this' inside the event listener callback
     // will be the element that fired the event which is 'closeBtn'
     // this.closeBtn.addEventListener('click', this.closeModal);
