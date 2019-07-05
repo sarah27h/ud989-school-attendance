@@ -189,6 +189,22 @@ let octopus = {
     tableBodyView.render();
   },
 
+  // add new student to our data
+  addNewStudent: function(studentName) {
+    const students = model.getAllStudentData();
+    console.log(octopus.getDaysNum());
+    students.push({
+      name: studentName.charAt(0).toUpperCase() + studentName.slice(1),
+      attendanceDays: Array(octopus.getDaysNum()).fill(false)
+    });
+
+    // update our array in local storage
+    model.updateStudentData(students);
+
+    // update the DOM elements with the right values
+    tableBodyView.render();
+  },
+
   // add a new property to clone
   // addMissedDaysAsProperty: function() {
   //     const clone = [...model.getAllStudentData()];
@@ -215,6 +231,7 @@ let octopus = {
     changeDaysNumModal.init();
     modalBoxView.init();
     changeDaysNumView.init();
+    addStudentView.init();
   }
 };
 
@@ -229,7 +246,7 @@ let tableHeaderView = {
   },
 
   render: function() {
-    // default days num
+    // cells equal to days num
     let cells = octopus.getDaysNum();
 
     // clear table and render
@@ -296,7 +313,8 @@ let tableBodyView = {
 
   render: function() {
     let tableBody = '';
-    let rows = 5;
+    // rows equal to student records
+    let rows = octopus.getStudentData().length;
     let cells = octopus.getDaysNum();
 
     // clear table and render
@@ -358,6 +376,7 @@ let tableBodyView = {
 /* options view */
 let changeDaysNumView = {
   init: function() {
+    // store pointers to our DOM elements for easy access later
     this.changeDaysNumBtn = document.getElementsByClassName('change-days-btn')[0];
     this.daysView = document.getElementById('days-view');
     this.closeOption = document.getElementsByClassName('option-close-btn')[0];
@@ -379,7 +398,7 @@ let changeDaysNumView = {
     // arrow function simply capture the 'this' of the surrounding scope.
     // value of 'this' inside an arrow function is determined by
     // where the arrow function is defined, not where it is used.
-    // () => this.closeModal() binds the context lexically with the modalBoxView object.
+    // () => this.toggleOptionView() binds the context lexically with the changeDaysNumView object.
     // this.closeBtn.addEventListener('click', () => this.toggleOptionView());
     // this.cancelBtn.addEventListener('click', () => this.toggleOptionView());
     this.changeDaysNumBtn.addEventListener('click', this.toggleOptionView.bind(this));
@@ -410,6 +429,40 @@ let changeDaysNumView = {
   toggleOptionView: function() {
     this.daysView.classList.toggle('hidden');
     this.daysView.classList.toggle('display-flex');
+  }
+};
+
+let addStudentView = {
+  init: function() {
+    // store pointers to our DOM elements for easy access later
+    this.addStudentViewBtn = document.getElementsByClassName('add-student-btn')[0];
+    this.addStudentView = document.getElementById('add-student-view');
+    this.closeOption = document.getElementsByClassName('option-close-btn')[1];
+    this.studentNameInput = document.getElementById('student-name');
+    this.addStudentBtn = document.getElementById('add-student');
+
+    // on click open, close addStudentView
+    this.addStudentViewBtn.addEventListener('click', this.toggleOptionView.bind(this));
+    this.closeOption.addEventListener('click', this.toggleOptionView.bind(this));
+
+    // on change, get student name
+    // use () => {..} to caputer value of 'this' bound to addStudentView object
+    this.addStudentBtn.addEventListener('click', () => {
+      let studentName = this.studentNameInput.value;
+      octopus.addNewStudent(studentName);
+    });
+  },
+
+  // used to open, close optionView
+  toggleOptionView: function() {
+    this.render();
+    this.addStudentView.classList.toggle('hidden');
+    this.addStudentView.classList.toggle('display-flex');
+  },
+
+  render: function() {
+    // clear input to improve UX
+    this.studentNameInput.value = '';
   }
 };
 
