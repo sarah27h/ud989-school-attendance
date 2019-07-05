@@ -31,7 +31,7 @@ let model = {
         return studentData;
       });
       // add daysNum in localStorage
-      localStorage.setItem('daysNum', '12');
+      localStorage.setItem('daysNum', 12);
 
       // converts a studentAttendance object to a JSON string
       // store studentAttendance JSON string
