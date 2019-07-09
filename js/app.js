@@ -205,6 +205,36 @@ let octopus = {
     tableBodyView.render();
   },
 
+  ascendSort: function(e) {
+    const studentNames = model.getAllStudentData();
+    // check clicked btn then decide which property will be applied
+    // studentx.name if e.target.id === 'sort-az-btn'
+    // studentx.missed if e.target.id === 'sort-19-btn'
+    e.target.id === 'sort-az-btn'
+      ? studentNames.sort((studentx, studenty) => (studentx.name < studenty.name ? -1 : 1))
+      : studentNames.sort((studentx, studenty) => (studentx.missed < studenty.missed ? -1 : 1));
+
+    // update our array in local storage
+    model.updateStudentData(studentNames);
+    // update the DOM elements with the right values
+    tableBodyView.render();
+  },
+
+  descendSort: function(e) {
+    const studentNames = model.getAllStudentData();
+    // check clicked btn then decide which property will be applied
+    // studentx.name if e.target.id === 'sort-za-btn'
+    // studentx.missed if e.target.id === 'sort-91-btn'
+    e.target.id === 'sort-za-btn'
+      ? studentNames.sort((studentx, studenty) => (studentx.name > studenty.name ? -1 : 1))
+      : studentNames.sort((studentx, studenty) => (studentx.missed > studenty.missed ? -1 : 1));
+
+    // update our array in local storage
+    model.updateStudentData(studentNames);
+    // update the DOM elements with the right values
+    tableBodyView.render();
+  },
+
   // add a new property to clone
   // addMissedDaysAsProperty: function() {
   //     const clone = [...model.getAllStudentData()];
@@ -228,10 +258,11 @@ let octopus = {
     model.init();
     tableBodyView.init();
     tableHeaderView.init();
-    changeDaysNumModal.init();
-    modalBoxView.init();
+    // changeDaysNumModal.init();
+    // modalBoxView.init();
     changeDaysNumView.init();
     addStudentView.init();
+    sortView.init();
   }
 };
 
@@ -463,6 +494,23 @@ let addStudentView = {
   render: function() {
     // clear input to improve UX
     this.studentNameInput.value = '';
+  }
+};
+
+/* sort options */
+let sortView = {
+  // store pointers to our DOM elements for easy access later
+  init: function() {
+    this.azSortBtn = document.getElementById('sort-az-btn');
+    this.zaSortBtn = document.getElementById('sort-za-btn');
+    this.ascendSortBtn = document.getElementById('sort-19-btn');
+    this.descendSorttBtn = document.getElementById('sort-91-btn');
+
+    // onclick sort students record alphabetic, numeric ascend or descend
+    this.azSortBtn.addEventListener('click', octopus.ascendSort);
+    this.zaSortBtn.addEventListener('click', octopus.descendSort);
+    this.ascendSortBtn.addEventListener('click', octopus.ascendSort);
+    this.descendSorttBtn.addEventListener('click', octopus.descendSort);
   }
 };
 

@@ -70,8 +70,8 @@ td.missed-col {
 }
 
 /* addStudent view */
-#options-container {
-  margin-top: 20px;
+#sort-options {
+  margin: 20px 0;
   display: flex;
   flex-wrap: nowrap;
   justify-content: space-between;
