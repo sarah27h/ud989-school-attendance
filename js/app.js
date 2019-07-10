@@ -83,7 +83,8 @@ let octopus = {
 
   // daysNum need to reflect user input
   getDaysNum: function() {
-    return model.getDaysNumFromStorage();
+    // convert DaysNumFromStorage to number
+    return Number(model.getDaysNumFromStorage());
   },
 
   //update daysNum
@@ -140,29 +141,6 @@ let octopus = {
     console.log(model.getAllStudentData());
   },
 
-  /* count missed days and add as property using pass an array every time
-    // addMissedDaysAsProperty: function() {
-        
-    //     model.getAllStudentData().forEach((student, index, arr) => {
-    //         arr[index]['missedDays'] = 0;
-            
-    //         student['attendanceDays'].map((day) => {
-
-    //             if (day === false) {
-    //                 student['missedDays']++;
-    //             }
-                
-    //         });
-
-    //         console.log(student, arr);
-    //         // to update our array in local storage with new missedDays property
-    //         model.updateStudentData(arr);
-    //     });
-
-    //     // model.updateStudentData(model.getAllStudentData());
-    //     console.log(model.getAllStudentData());
-    // }, */
-
   // update attendance days depends on checkboxs, update storage, render table tableBodyView
   updateAttendance: function(rowIndex, checkboxIndex) {
     // loop through StudentData and by using rowIndex, recordIndex
@@ -192,7 +170,6 @@ let octopus = {
   // add new student to our data
   addNewStudent: function(studentName) {
     const students = model.getAllStudentData();
-    console.log(octopus.getDaysNum());
     students.push({
       name: studentName.charAt(0).toUpperCase() + studentName.slice(1),
       attendanceDays: Array(octopus.getDaysNum()).fill(false)
@@ -235,31 +212,10 @@ let octopus = {
     tableBodyView.render();
   },
 
-  // add a new property to clone
-  // addMissedDaysAsProperty: function() {
-  //     const clone = [...model.getAllStudentData()];
-  //     clone.forEach((student, index, arr) => {
-  //         arr[index]['missedDays'] = 0
-  //         student['attendanceDays'].map((day) => {
-  //             if (day === false) {
-  //                 student['missedDays']++;
-  //             }
-  //         });
-
-  //         console.log(student, student['missedDays']);
-
-  //         // return student;
-  //     });
-  //     model.updateStudentData(clone);
-  //     console.log(clone, model.getAllStudentData());
-  // },
-
   init: function() {
     model.init();
     tableBodyView.init();
     tableHeaderView.init();
-    // changeDaysNumModal.init();
-    // modalBoxView.init();
     changeDaysNumView.init();
     addStudentView.init();
     sortView.init();
