@@ -172,7 +172,8 @@ let octopus = {
     const students = model.getAllStudentData();
     students.push({
       name: studentName.charAt(0).toUpperCase() + studentName.slice(1),
-      attendanceDays: Array(octopus.getDaysNum()).fill(false)
+      attendanceDays: Array(octopus.getDaysNum()).fill(false),
+      missed: octopus.getDaysNum()
     });
 
     // update our array in local storage
