@@ -295,6 +295,9 @@ let tableBodyView = {
       }
     });
 
+    // add missed days as property for each student record at first init of app
+    octopus.addMissedDaysAsProperty();
+
     // render table tableBodyView
     tableBodyView.render();
   },
