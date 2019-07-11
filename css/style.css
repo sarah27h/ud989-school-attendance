@@ -168,9 +168,11 @@ td.missed-col {
   border-top: 1px solid #ddd;
 }
 
-.option-close i {
-  font-size: 33px;
+.option-close .option-close-btn {
+  font-size: 40px;
   color: #000;
+  background: transparent;
+  transition: all 1s;
 }
 
 /* modal */
