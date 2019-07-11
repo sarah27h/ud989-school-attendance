@@ -31,7 +31,7 @@ let model = {
         return studentData;
       });
       // add daysNum in localStorage
-      localStorage.setItem('daysNum', 12);
+      localStorage.setItem('daysNum', '12');
 
       // converts a studentAttendance object to a JSON string
       // store studentAttendance JSON string
@@ -327,7 +327,7 @@ let tableBodyView = {
 
       // create student name cells
       let studentName = document.createTextNode(`${octopus.getStudentData()[row - 1]['name']}`);
-      let nameCell = tableRow.insertCell(0); // insert student name ex 'Slappy' at index 0
+      let nameCell = tableRow.insertCell(0); // insert student name ex 'Alice' at index 0
       nameCell.setAttribute('class', 'name-col');
       nameCell.appendChild(studentName);
 
