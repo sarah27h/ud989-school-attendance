@@ -167,6 +167,14 @@ let octopus = {
     tableBodyView.render();
   },
 
+  // used to open, close optionView
+  toggleOptionView: function(view) {
+    this.render();
+    console.log(this, view);
+    view.classList.toggle('hidden');
+    view.classList.toggle('display-flex');
+  },
+
   // add new student to our data
   addNewStudent: function(studentName) {
     const students = model.getAllStudentData();
@@ -218,7 +226,7 @@ let octopus = {
     tableBodyView.init();
     tableHeaderView.init();
     changeDaysNumView.init();
-    addStudentView.init();
+    addNewStudentView.init();
     sortView.init();
   }
 };
@@ -375,10 +383,6 @@ let changeDaysNumView = {
     this.subtractBtn = document.getElementById('subtract-btn');
     this.increaseBtn = document.getElementById('increase-btn');
 
-    // set daysNumInput value to be always days num
-    // to improve UX every time user want to change days num stop at the last time days num
-    this.daysNumInput.setAttribute('value', octopus.getDaysNum());
-
     // 'this' inside the event listener callback
     // will be the element that fired the event which is 'closeBtn'
     // this.closeBtn.addEventListener('click', this.closeModal);
@@ -392,8 +396,11 @@ let changeDaysNumView = {
     // () => this.toggleOptionView() binds the context lexically with the changeDaysNumView object.
     // this.closeBtn.addEventListener('click', () => this.toggleOptionView());
     // this.cancelBtn.addEventListener('click', () => this.toggleOptionView());
-    this.changeDaysNumBtn.addEventListener('click', this.toggleOptionView.bind(this));
-    this.closeOption.addEventListener('click', this.toggleOptionView.bind(this));
+    this.changeDaysNumBtn.addEventListener(
+      'click',
+      octopus.toggleOptionView.bind(this, this.daysView)
+    );
+    this.closeOption.addEventListener('click', octopus.toggleOptionView.bind(this, this.daysView));
 
     // on change, get new value
     this.daysNumInput.addEventListener('change', function(e) {
@@ -415,15 +422,15 @@ let changeDaysNumView = {
       octopus.updateDaysNum(this.daysNumInput.value);
     });
   },
-
-  // used to open, close optionView
-  toggleOptionView: function() {
-    this.daysView.classList.toggle('hidden');
-    this.daysView.classList.toggle('display-flex');
+  //
+  render: function() {
+    // set daysNumInput value to be always days num
+    // to improve UX every time user want to change days num stop at the last time days num
+    this.daysNumInput.setAttribute('value', octopus.getDaysNum());
   }
 };
 
-let addStudentView = {
+let addNewStudentView = {
   init: function() {
     // store pointers to our DOM elements for easy access later
     this.addStudentViewBtn = document.getElementsByClassName('add-student-btn')[0];
@@ -433,22 +440,23 @@ let addStudentView = {
     this.addStudentBtn = document.getElementById('add-student');
 
     // on click open, close addStudentView
-    this.addStudentViewBtn.addEventListener('click', this.toggleOptionView.bind(this));
-    this.closeOption.addEventListener('click', this.toggleOptionView.bind(this));
+    this.addStudentViewBtn.addEventListener(
+      'click',
+      octopus.toggleOptionView.bind(this, this.addStudentView)
+    );
+    this.closeOption.addEventListener(
+      'click',
+      octopus.toggleOptionView.bind(this, this.addStudentView)
+    );
 
     // on change, get student name
     // use () => {..} to caputer value of 'this' bound to addStudentView object
     this.addStudentBtn.addEventListener('click', () => {
       let studentName = this.studentNameInput.value;
       octopus.addNewStudent(studentName);
+      // clear input to improve UX
+      this.render();
     });
-  },
-
-  // used to open, close optionView
-  toggleOptionView: function() {
-    this.render();
-    this.addStudentView.classList.toggle('hidden');
-    this.addStudentView.classList.toggle('display-flex');
   },
 
   render: function() {
