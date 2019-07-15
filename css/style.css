@@ -46,12 +46,20 @@ input {
 
 .primary-btn {
   background-color: #ff6347;
-  margin-left: auto;
+  transition: all 1s;
 }
 
+.primary-btn:hover {
+  background-color: #d5553e;
+}
 .secondary-btn {
   background-color: #aaa;
-  margin-right: auto;
+  margin-right: 45px;
+  transition: all 1s;
+}
+
+.secondary-btn:hover {
+  background-color: #787777;
 }
 
 /* Column types */
@@ -67,6 +75,11 @@ td.missed-col {
 
 .name-col {
   text-align: left;
+}
+
+.name-cell {
+  text-align: left;
+  min-width: 110px; /*set the table column width constant regardless of the amount of text in its cells */
 }
 
 /* addStudent view */
@@ -175,6 +188,12 @@ td.missed-col {
   transition: all 1s;
 }
 
+.delete-option-btn {
+  font-size: 1.5em;
+  padding: 7px;
+  margin-right: 5px;
+}
+
 /* modal */
 .modal {
   position: fixed; /* Stay in place */
@@ -220,8 +239,7 @@ td.missed-col {
   display: flex;
   padding: 30px 0;
   justify-content: space-between;
-  /* items are centered in the cross-axis */
-  align-items: center;
+  align-items: center; /* items are centered in the cross-axis */
   padding: 16px;
 }
 
@@ -232,8 +250,8 @@ td.missed-col {
 .modal-footer {
   display: flex;
   width: 100%;
-  justify-content: space-between;
-  border-top: 1px solid #ddd;
+  justify-content: flex-end;
+  /* border-top: 1px solid #ddd; */
   padding: 16px;
 }
 
@@ -246,6 +264,7 @@ td.missed-col {
   font-size: 28px;
   font-weight: bold;
   cursor: pointer;
+  transition: all 1s;
 }
 
 .modal .modal-close-btn:hover,

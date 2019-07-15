@@ -191,6 +191,23 @@ let octopus = {
     tableBodyView.render();
   },
 
+  // delete student record from our data
+  deleteStudent: function(studentRecordIndex) {
+    const studentData = model.getAllStudentData();
+    const deletedStudent = studentData.splice(studentRecordIndex, 1);
+    console.log(deletedStudent);
+    // update our array in local storage with checkboxIndex toggle to update missed col
+    // in table tableBodyView because missed col value calculate directly using model.getAllStudentData()
+    // student data from local storage
+    model.updateStudentData(studentData);
+
+    // update our array in local storage with new missedDays property
+    octopus.addMissedDaysAsProperty();
+
+    // render this tableBodyView (update the DOM elements with the right values)
+    tableBodyView.render();
+  },
+
   ascendSort: function(e) {
     const studentNames = model.getAllStudentData();
     // check clicked btn then decide which property will be applied
@@ -228,6 +245,7 @@ let octopus = {
     changeDaysNumView.init();
     addNewStudentView.init();
     sortView.init();
+    modalBoxView.init();
   }
 };
 
@@ -255,7 +273,7 @@ let tableHeaderView = {
     // create name cell in table header
     let nameCell = document.createElement('th');
     nameCell.appendChild(document.createTextNode('Student Name'));
-    nameCell.setAttribute('class', 'name-col');
+    nameCell.setAttribute('class', 'name-cell');
     headerRows.appendChild(nameCell);
 
     // create days cell in table header
@@ -290,10 +308,13 @@ let tableBodyView = {
     //     console.log(this.tableRows[1].innerText);
     // });
 
-    // on change, get cell, row index and pass to octopus to update
+    // on change, get cell -> reflect a day in attendenceDays array
+    // row index -> reflect student Record
     this.tableBody.addEventListener('change', function(e) {
       // check if evt.target is input
       if (e.target.nodeName.toLowerCase() === 'input') {
+        // Subtract -1 to reflect day index in attendenceDays array
+        // Subtract -1 to reflect student Record index in student data
         let rowIndex = e.target.parentNode.parentNode.rowIndex - 1,
           checkboxIndex = e.target.parentNode.cellIndex - 1;
         console.log(e.target, 'change event');
@@ -303,6 +324,26 @@ let tableBodyView = {
       }
     });
 
+    // on click delete student btn
+    this.tableBody.addEventListener('click', e => {
+      // check if evt.target is delete student btn
+      if (e.target.nodeName.toLowerCase() === 'button') {
+        modalBoxView.openModal();
+        // get clicked student record
+        const studentRecordIndex = e.target.parentNode.parentNode.rowIndex - 1;
+        console.log(e.target.id, studentRecordIndex);
+        // on click modal yes btn remove student record
+        modalBoxView.yesBtn.addEventListener('click', function() {
+          octopus.deleteStudent(studentRecordIndex);
+          modalBoxView.closeModal();
+        });
+
+        // on click modal no btn close modal
+        modalBoxView.noBtn.addEventListener('click', function() {
+          modalBoxView.closeModal();
+        });
+      }
+    });
     // add missed days as property for each student record at first init of app
     octopus.addMissedDaysAsProperty();
 
@@ -326,9 +367,16 @@ let tableBodyView = {
       let tableRow = this.tableBody.insertRow(row - 1);
 
       // create student name cells
-      let studentName = document.createTextNode(`${octopus.getStudentData()[row - 1]['name']}`);
+      let studentName = document.createTextNode(` ${octopus.getStudentData()[row - 1]['name']}`);
       let nameCell = tableRow.insertCell(0); // insert student name ex 'Alice' at index 0
-      nameCell.setAttribute('class', 'name-col');
+      nameCell.setAttribute('class', 'name-cell');
+
+      // create delete student option btn
+      let deletOptionBtn = document.createElement('button');
+      deletOptionBtn.setAttribute('class', 'delete-option-btn option-btn fas fa-user-times');
+      // deletOptionBtn.setAttribute('id', `delete-option-btn${row}`);
+      nameCell.appendChild(deletOptionBtn);
+
       nameCell.appendChild(studentName);
 
       // create checkbox cells
@@ -479,6 +527,60 @@ let sortView = {
     this.zaSortBtn.addEventListener('click', octopus.descendSort);
     this.ascendSortBtn.addEventListener('click', octopus.ascendSort);
     this.descendSorttBtn.addEventListener('click', octopus.descendSort);
+  }
+};
+
+/* modal box view */
+let modalBoxView = {
+  init: function() {
+    this.modalBox = document.getElementById('modal-box');
+    this.closeBtn = document.getElementsByClassName('modal-close-btn')[0];
+    this.noBtn = document.getElementsByClassName('secondary-btn')[1];
+    this.yesBtn = document.getElementsByClassName('primary-btn')[2];
+    // 'this' inside the event listener callback
+    // will be the element that fired the event which is 'closeBtn'
+    // this.closeBtn.addEventListener('click', this.closeModal);
+    // to solve that use bind() method to bind our function to modalBoxView
+    // this.closeBtn.addEventListener('click', this.closeModal.bind(modalBoxView));
+    // this.closeBtn.addEventListener('click', this.closeModal.bind(this));
+    //***************************************************************
+    // or using arrow functions
+    // arrow function simply capture the this of the surrounding scope.
+    // value of 'this' inside an arrow function is determined by
+    // where the arrow function is defined, not where it is used.
+    // () => this.closeModal() binds the context lexically with the modalBoxView object.
+    // this.closeBtn.addEventListener('click', () => this.closeModal());
+    // this.cancelBtn.addEventListener('click', () => this.closeModal());
+    this.closeBtn.addEventListener('click', this.closeModal.bind(this));
+    this.noBtn.addEventListener('click', this.closeModal.bind(this));
+
+    window.addEventListener('click', evt => {
+      if (evt.target === this.modalBox) {
+        console.log(evt.target);
+        modalBoxView.closeModal();
+      }
+    });
+  },
+
+  openModal: function() {
+    this.modalBox.classList.remove('hidden');
+    this.modalBox.classList.add('show');
+  },
+
+  // closeModal: ()  => {...}
+  // "Arrow functions have no concept of 'this'.
+  // 'this' inside of an arrow function is whatever 'this' is in their containing lexical environment.
+  // *********
+  // Don't use arrow functions if you need to bind the value of this.
+  // *********
+  // value of 'this' inside an arrow function is determined by
+  // where the arrow function is defined, not where it is used.
+  // closeModal: ()  => {...} binds the context lexically with the window object.
+  // use normal functions instead as callbacks.
+  closeModal: function() {
+    console.log(this);
+    this.modalBox.classList.remove('show');
+    this.modalBox.classList.add('hidden');
   }
 };
 
