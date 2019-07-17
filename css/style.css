@@ -12,6 +12,7 @@ th {
 td {
   border-top: 1px solid #eee;
   padding: 0.5em 1em;
+  text-align: center;
 }
 
 input {
@@ -80,6 +81,13 @@ td.missed-col {
 .name-cell {
   text-align: left;
   min-width: 110px; /*set the table column width constant regardless of the amount of text in its cells */
+}
+
+.selected-col {
+  background: #c6e5ff;
+  -webkit-box-shadow: 2px 2px 23px 0px rgba(0, 0, 0, 0.56);
+  -moz-box-shadow: 2px 2px 23px 0px rgba(0, 0, 0, 0.56);
+  box-shadow: 2px 2px 5px 0px rgba(0, 0, 0, 0.56);
 }
 
 /* addStudent view */

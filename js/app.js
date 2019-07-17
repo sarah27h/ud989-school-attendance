@@ -330,6 +330,23 @@ let tableBodyView = {
       if (e.target.nodeName.toLowerCase() === 'button') {
         // get clicked student record
         let studentRecordIndex = e.target.parentNode.parentNode.rowIndex - 1;
+        // get missedDaysCell in HTML collection
+        // based on that its index equal studentRecordIndex + 1
+        // because HTML collection start at 0, studentRecordIndexs start at 1
+        // HTML collection [th.missed-col, td.missed-col, td.missed-col, td.missed-col, td.missed-col]
+        let missedDaysCell = document.getElementsByClassName('missed-col')[studentRecordIndex + 1];
+
+        // highlighting selected row
+        highlightingSelectedRow();
+
+        function highlightingSelectedRow() {
+          // style selected row
+          // to override styling of missedDaysCell
+          e.target.parentNode.parentNode.classList.toggle('selected-col');
+          missedDaysCell.classList.toggle('missed-col');
+        }
+
+        // open modal box
         modalBoxView.openModal();
 
         // on click close modal
@@ -347,6 +364,9 @@ let tableBodyView = {
           modalBoxView.yesBtn.removeEventListener('click', deleteStudentHandler);
           modalBoxView.closeBtn.removeEventListener('click', closeModalHandler);
           modalBoxView.noBtn.removeEventListener('click', closeModalHandler);
+          // highlighting selected row
+          highlightingSelectedRow();
+          // close modal box
           modalBoxView.closeModal();
         }
 
