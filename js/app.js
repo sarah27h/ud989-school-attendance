@@ -325,23 +325,44 @@ let tableBodyView = {
     });
 
     // on click delete student btn
-    this.tableBody.addEventListener('click', e => {
+    this.tableBody.addEventListener('dblclick', function(e) {
       // check if evt.target is delete student btn
       if (e.target.nodeName.toLowerCase() === 'button') {
-        modalBoxView.openModal();
         // get clicked student record
-        const studentRecordIndex = e.target.parentNode.parentNode.rowIndex - 1;
-        console.log(e.target.id, studentRecordIndex);
-        // on click modal yes btn remove student record
-        modalBoxView.yesBtn.addEventListener('click', function() {
-          octopus.deleteStudent(studentRecordIndex);
-          modalBoxView.closeModal();
-        });
+        let studentRecordIndex = e.target.parentNode.parentNode.rowIndex - 1;
+        modalBoxView.openModal();
 
-        // on click modal no btn close modal
-        modalBoxView.noBtn.addEventListener('click', function() {
+        // on click close modal
+        modalBoxView.closeBtn.addEventListener('click', closeModalHandler);
+        modalBoxView.noBtn.addEventListener('click', closeModalHandler);
+
+        // on click modal yes btn remove student record
+        modalBoxView.yesBtn.addEventListener('click', deleteStudentHandler);
+
+        // close modal handler
+        function closeModalHandler() {
+          // remove click event to avoid nested event handler
+          // every click on deleteStudentBtn cause the event handler for the yesBtn is attached twice
+          // this cause delete 2 student at a time
+          modalBoxView.yesBtn.removeEventListener('click', deleteStudentHandler);
+          modalBoxView.closeBtn.removeEventListener('click', closeModalHandler);
+          modalBoxView.noBtn.removeEventListener('click', closeModalHandler);
           modalBoxView.closeModal();
-        });
+        }
+
+        // delete student handler
+        function deleteStudentHandler(event) {
+          console.log('delete confirm', studentRecordIndex);
+          // send student record index to octopus to delete it
+          octopus.deleteStudent(studentRecordIndex);
+          // remove click event to avoid nested event handler
+          // every click on deleteStudentBtn, the event handler for the yesBtn is attached twice
+          // this cause delete 2 student at a time
+          modalBoxView.yesBtn.removeEventListener('click', deleteStudentHandler);
+          modalBoxView.closeBtn.removeEventListener('click', closeModalHandler);
+          modalBoxView.yesBtn.removeEventListener('click', deleteStudentHandler);
+          modalBoxView.closeModal();
+        }
       }
     });
     // add missed days as property for each student record at first init of app
@@ -551,8 +572,9 @@ let modalBoxView = {
     // () => this.closeModal() binds the context lexically with the modalBoxView object.
     // this.closeBtn.addEventListener('click', () => this.closeModal());
     // this.cancelBtn.addEventListener('click', () => this.closeModal());
-    this.closeBtn.addEventListener('click', this.closeModal.bind(this));
-    this.noBtn.addEventListener('click', this.closeModal.bind(this));
+
+    // this.closeBtn.addEventListener('click', this.closeModal.bind(this));
+    // this.noBtn.addEventListener('click', this.closeModal.bind(this));
 
     window.addEventListener('click', evt => {
       if (evt.target === this.modalBox) {
@@ -578,7 +600,6 @@ let modalBoxView = {
   // closeModal: ()  => {...} binds the context lexically with the window object.
   // use normal functions instead as callbacks.
   closeModal: function() {
-    console.log(this);
     this.modalBox.classList.remove('show');
     this.modalBox.classList.add('hidden');
   }
