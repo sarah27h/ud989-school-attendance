@@ -192,10 +192,16 @@ let octopus = {
   },
 
   // delete student record from our data
-  deleteStudent: function(studentRecordIndex) {
+  deleteStudent: function(studentRecordIndexs) {
     const studentData = model.getAllStudentData();
-    const deletedStudent = studentData.splice(studentRecordIndex, 1);
-    console.log(deletedStudent);
+    studentRecordIndexs
+      .sort((a, b) => (a > b ? -1 : 1))
+      .forEach(recordIndex => {
+        console.log(recordIndex, studentData);
+        studentData.splice(recordIndex, 1);
+      });
+    // const deletedStudent = studentData.splice(studentRecordIndex, 1);
+    console.log(studentData);
     // update our array in local storage with checkboxIndex toggle to update missed col
     // in table tableBodyView because missed col value calculate directly using model.getAllStudentData()
     // student data from local storage
@@ -244,6 +250,7 @@ let octopus = {
     tableHeaderView.init();
     changeDaysNumView.init();
     addNewStudentView.init();
+    deleteStudentView.init();
     sortView.init();
     modalBoxView.init();
   }
@@ -254,6 +261,21 @@ let tableHeaderView = {
   init: function() {
     this.studentTable = document.getElementById('student-table');
     this.tableHeader = document.getElementById('table-thead');
+
+    // on click selectAllOptionBtn store pointer to selectOptionBtns for student records
+    // simulate click of selectAllOptionBtn
+    // use it to call highlightingSelectedRow, and them to studentRecordIndexs to delete them
+    this.tableHeader.addEventListener('click', function(e) {
+      if (e.target.nodeName.toLowerCase() === 'button') {
+        // return HTMLCollection
+        const selectOptionBtns = document.getElementsByClassName('select-option-btn');
+        // begin with i = 1 to ignore selectAllOptionBtn
+        // and auto click selectOptionBtns for student records
+        for (let i = 1; i < selectOptionBtns.length; i++) {
+          selectOptionBtns[i].click();
+        }
+      }
+    });
 
     // render tableHeaderView
     tableHeaderView.render();
@@ -272,6 +294,10 @@ let tableHeaderView = {
 
     // create name cell in table header
     let nameCell = document.createElement('th');
+    // create select student option btn
+    let selectAllOptionBtn = document.createElement('button');
+    selectAllOptionBtn.setAttribute('class', 'select-option-btn option-btn fas fa-align-justify');
+    nameCell.appendChild(selectAllOptionBtn);
     nameCell.appendChild(document.createTextNode('Student Name'));
     nameCell.setAttribute('class', 'name-cell');
     headerRows.appendChild(nameCell);
@@ -296,6 +322,8 @@ let tableHeaderView = {
 let tableBodyView = {
   init: function() {
     this.tableBody = document.getElementById('table-body');
+    let studentRecordIndexs = [];
+    let missedDaysCell;
 
     // getElementsByClassName returns a live HTMLCollection.
     // The little blue i in the console indicates that
@@ -324,17 +352,25 @@ let tableBodyView = {
       }
     });
 
-    // on click delete student btn
-    this.tableBody.addEventListener('dblclick', function(e) {
+    // on click select student record btn
+    this.tableBody.addEventListener('click', function(e) {
       // check if evt.target is delete student btn
       if (e.target.nodeName.toLowerCase() === 'button') {
         // get clicked student record
         let studentRecordIndex = e.target.parentNode.parentNode.rowIndex - 1;
-        // get missedDaysCell in HTML collection
-        // based on that its index equal studentRecordIndex + 1
-        // because HTML collection start at 0, studentRecordIndexs start at 1
-        // HTML collection [th.missed-col, td.missed-col, td.missed-col, td.missed-col, td.missed-col]
-        let missedDaysCell = document.getElementsByClassName('missed-col')[studentRecordIndex + 1];
+
+        // check if we have click this record before
+        if (studentRecordIndexs.indexOf(studentRecordIndex) === -1) {
+          studentRecordIndexs.push(studentRecordIndex);
+          // get missedDaysCell in HTML collection
+          // based on that its index equal studentRecordIndex + 1
+          // because HTML collection start at 0, studentRecordIndexs start at 1
+          // HTML collection [th.missed-col, td.missed-col, td.missed-col, td.missed-col, td.missed-col, td.missed-col]
+          missedDaysCell = document.getElementsByClassName('missed-col')[studentRecordIndex + 1];
+        } else {
+          studentRecordIndexs.splice(studentRecordIndexs.indexOf(studentRecordIndex), 1);
+          missedDaysCell = document.getElementsByClassName('missed-col')[studentRecordIndex + 1];
+        }
 
         // highlighting selected row
         highlightingSelectedRow();
@@ -343,45 +379,19 @@ let tableBodyView = {
           // style selected row
           // to override styling of missedDaysCell
           e.target.parentNode.parentNode.classList.toggle('selected-col');
-          missedDaysCell.classList.toggle('missed-col');
+          missedDaysCell.classList.toggle('selected-col');
         }
 
-        // open modal box
-        modalBoxView.openModal();
-
-        // on click close modal
-        modalBoxView.closeBtn.addEventListener('click', closeModalHandler);
-        modalBoxView.noBtn.addEventListener('click', closeModalHandler);
-
-        // on click modal yes btn remove student record
-        modalBoxView.yesBtn.addEventListener('click', deleteStudentHandler);
-
-        // close modal handler
-        function closeModalHandler() {
-          // remove click event to avoid nested event handler
-          // every click on deleteStudentBtn cause the event handler for the yesBtn is attached twice
-          // this cause delete 2 student at a time
-          modalBoxView.yesBtn.removeEventListener('click', deleteStudentHandler);
-          modalBoxView.closeBtn.removeEventListener('click', closeModalHandler);
-          modalBoxView.noBtn.removeEventListener('click', closeModalHandler);
-          // highlighting selected row
-          highlightingSelectedRow();
-          // close modal box
-          modalBoxView.closeModal();
-        }
+        deleteStudentView.deleteStudentBtn.addEventListener('click', deleteStudentHandler);
 
         // delete student handler
         function deleteStudentHandler(event) {
-          console.log('delete confirm', studentRecordIndex);
+          // alert('clicked');
           // send student record index to octopus to delete it
-          octopus.deleteStudent(studentRecordIndex);
-          // remove click event to avoid nested event handler
-          // every click on deleteStudentBtn, the event handler for the yesBtn is attached twice
-          // this cause delete 2 student at a time
-          modalBoxView.yesBtn.removeEventListener('click', deleteStudentHandler);
-          modalBoxView.closeBtn.removeEventListener('click', closeModalHandler);
-          modalBoxView.yesBtn.removeEventListener('click', deleteStudentHandler);
-          modalBoxView.closeModal();
+          octopus.deleteStudent(studentRecordIndexs);
+          console.log('delete confirm', studentRecordIndexs);
+          deleteStudentView.deleteStudentBtn.removeEventListener('click', deleteStudentHandler);
+          studentRecordIndexs = [];
         }
       }
     });
@@ -414,7 +424,7 @@ let tableBodyView = {
 
       // create delete student option btn
       let deletOptionBtn = document.createElement('button');
-      deletOptionBtn.setAttribute('class', 'delete-option-btn option-btn fas fa-user-times');
+      deletOptionBtn.setAttribute('class', 'select-option-btn option-btn fas fa-user-check');
       // deletOptionBtn.setAttribute('id', `delete-option-btn${row}`);
       nameCell.appendChild(deletOptionBtn);
 
@@ -554,6 +564,29 @@ let addNewStudentView = {
   }
 };
 
+let deleteStudentView = {
+  init: function() {
+    // store pointers to our DOM elements for easy access later
+    this.deleteStudentViewBtn = document.getElementsByClassName('delete-student-btn')[0];
+    this.deleteStudentView = document.getElementById('delete-student-view');
+    this.closeOption = document.getElementsByClassName('option-close-btn')[2];
+    this.deleteStudentBtn = document.getElementById('delete-student-btn');
+    this.confirmDeleteMessage = document.getElementById('confirm-delete-message');
+
+    // on click open, close addStudentView
+    this.deleteStudentViewBtn.addEventListener(
+      'click',
+      octopus.toggleOptionView.bind(this, this.deleteStudentView)
+    );
+    this.closeOption.addEventListener(
+      'click',
+      octopus.toggleOptionView.bind(this, this.deleteStudentView)
+    );
+  },
+
+  render: function() {}
+};
+
 /* sort options */
 let sortView = {
   // store pointers to our DOM elements for easy access later
@@ -577,7 +610,7 @@ let modalBoxView = {
     this.modalBox = document.getElementById('modal-box');
     this.closeBtn = document.getElementsByClassName('modal-close-btn')[0];
     this.noBtn = document.getElementsByClassName('secondary-btn')[1];
-    this.yesBtn = document.getElementsByClassName('primary-btn')[2];
+    this.yesBtn = document.getElementsByClassName('primary-btn')[3];
     // 'this' inside the event listener callback
     // will be the element that fired the event which is 'closeBtn'
     // this.closeBtn.addEventListener('click', this.closeModal);

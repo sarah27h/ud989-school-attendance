@@ -66,9 +66,10 @@ input {
 /* Column types */
 th.missed-col {
   background-color: #f00;
+  color: #fff;
 }
 
-td.missed-col {
+.missed-col {
   background-color: #ffecec;
   color: #f00;
   text-align: center;
@@ -80,14 +81,14 @@ td.missed-col {
 
 .name-cell {
   text-align: left;
-  min-width: 110px; /*set the table column width constant regardless of the amount of text in its cells */
+  min-width: 157px; /*set the table column width constant regardless of the amount of text in its cells */
 }
 
 .selected-col {
-  background: #c6e5ff;
-  -webkit-box-shadow: 2px 2px 23px 0px rgba(0, 0, 0, 0.56);
+  background: #dedede;
+  /* -webkit-box-shadow: 2px 2px 23px 0px rgba(0, 0, 0, 0.56);
   -moz-box-shadow: 2px 2px 23px 0px rgba(0, 0, 0, 0.56);
-  box-shadow: 2px 2px 5px 0px rgba(0, 0, 0, 0.56);
+  box-shadow: 2px 2px 5px 0px rgba(0, 0, 0, 0.56); */
 }
 
 /* addStudent view */
@@ -196,7 +197,7 @@ td.missed-col {
   transition: all 1s;
 }
 
-.delete-option-btn {
+.select-option-btn {
   font-size: 1.5em;
   padding: 7px;
   margin-right: 5px;
