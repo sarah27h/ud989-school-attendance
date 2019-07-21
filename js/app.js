@@ -510,7 +510,8 @@ let changeDaysNumView = {
     // on click, decrease daysNumInput value by 1
     // update daysNum in model using octopus.updateDaysNum()
     this.subtractBtn.addEventListener('click', () => {
-      this.daysNumInput.value--;
+      // put a limit for input type
+      this.daysNumInput.value > 1 ? this.daysNumInput.value-- : 1;
       octopus.updateDaysNum(this.daysNumInput.value);
     });
 
