@@ -410,7 +410,7 @@ let tableBodyView = {
     this.tableBody.addEventListener('click', function(e) {
       // check if evt.target is delete student btn
       if (e.target.nodeName.toLowerCase() === 'button') {
-        alert('select btn clicked');
+        // alert('select btn clicked');
         // get clicked student record
         let studentRecordIndex = e.target.parentNode.parentNode.rowIndex - 1;
 
