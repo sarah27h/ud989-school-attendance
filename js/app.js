@@ -2,6 +2,8 @@
 let model = {
   studentNames: ['Alice', 'Lydia', 'Adam', 'Daniel', 'Amy'],
 
+  deletedRecords: [],
+
   // Create attendance records if it hasn't created yet, use local storage to store them
   init: function() {
     if (!localStorage.studentData) {
@@ -71,6 +73,11 @@ let model = {
       console.log('array', array);
     });
     console.log(model.getAllStudentData());
+  },
+
+  addDeletedRecords: function(deletedRecords) {
+    let items = deletedRecords;
+    return items;
   }
 };
 
@@ -194,14 +201,20 @@ let octopus = {
   // delete student record from our data
   deleteStudent: function(studentRecordIndexs) {
     const studentData = model.getAllStudentData();
+
+    let deletedStudents = [];
     studentRecordIndexs
       .sort((a, b) => (a > b ? -1 : 1))
       .forEach(recordIndex => {
         console.log(recordIndex, studentData);
+        deletedStudents.push(studentData[recordIndex]);
         studentData.splice(recordIndex, 1);
       });
+
+    model.deletedRecords = [...deletedStudents];
+
     // const deletedStudent = studentData.splice(studentRecordIndex, 1);
-    console.log(studentData);
+    console.log(studentData, deletedStudents, model.deletedRecords);
     // update our array in local storage with checkboxIndex toggle to update missed col
     // in table tableBodyView because missed col value calculate directly using model.getAllStudentData()
     // student data from local storage
@@ -212,6 +225,27 @@ let octopus = {
 
     // render this tableBodyView (update the DOM elements with the right values)
     tableBodyView.render();
+  },
+
+  undoDelete: function() {
+    let studentData = [];
+    console.log(model.deletedRecords, model.getAllStudentData());
+
+    studentData = octopus.getStudentData().concat(model.deletedRecords);
+
+    console.log(model.deletedRecords, studentData);
+    if (model.deletedRecords.length > 0) {
+      // student data from local storage
+      model.updateStudentData(studentData);
+
+      // update our array in local storage with new missedDays property
+      octopus.addMissedDaysAsProperty();
+
+      // render this tableBodyView (update the DOM elements with the right values)
+      tableBodyView.render();
+
+      model.deletedRecords = [];
+    }
   },
 
   ascendSort: function(e) {
@@ -253,6 +287,7 @@ let octopus = {
     deleteStudentView.init();
     sortView.init();
     modalBoxView.init();
+    undoDelete.init();
   }
 };
 
@@ -356,6 +391,7 @@ let tableBodyView = {
     this.tableBody.addEventListener('click', function(e) {
       // check if evt.target is delete student btn
       if (e.target.nodeName.toLowerCase() === 'button') {
+        alert('select btn clicked');
         // get clicked student record
         let studentRecordIndex = e.target.parentNode.parentNode.rowIndex - 1;
 
@@ -386,7 +422,7 @@ let tableBodyView = {
 
         // delete student handler
         function deleteStudentHandler(event) {
-          // alert('clicked');
+          alert('clicked');
           // send student record index to octopus to delete it
           octopus.deleteStudent(studentRecordIndexs);
           console.log('delete confirm', studentRecordIndexs);
@@ -586,6 +622,16 @@ let deleteStudentView = {
   },
 
   render: function() {}
+};
+
+let undoDelete = {
+  init: function() {
+    this.undoBtn = document.getElementsByClassName('undo-btn')[0];
+
+    this.undoBtn.addEventListener('click', function() {
+      octopus.undoDelete();
+    });
+  }
 };
 
 /* sort options */
