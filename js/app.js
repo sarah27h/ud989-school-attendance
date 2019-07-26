@@ -184,6 +184,8 @@ let octopus = {
     console.log(this, view);
     view.classList.toggle('hidden');
     view.classList.toggle('display-flex');
+    // add scroll to when click option view
+    octopus.scrollToView();
   },
 
   // add new student to our data
@@ -297,6 +299,16 @@ let octopus = {
     model.updateStudentData(studentNames);
     // update the DOM elements with the right values
     tableBodyView.render();
+  },
+
+  // add scroll to when click option view
+  scrollToView: function() {
+    // window.scrollTo(0, 350, { behavior: 'smooth' });
+    window.scroll({
+      top: 350,
+      left: 0,
+      behavior: 'smooth'
+    });
   },
 
   init: function() {
