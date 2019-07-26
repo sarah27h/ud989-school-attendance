@@ -239,8 +239,9 @@ let octopus = {
     // update our array in local storage with new missedDays property
     octopus.addMissedDaysAsProperty();
 
-    // render this tableBodyView (update the DOM elements with the right values)
+    // render this tableBodyView, tableHeaderView (update the DOM elements with the right values)
     tableBodyView.render();
+    tableHeaderView.render();
   },
 
   // undo delete action
@@ -317,23 +318,37 @@ let tableHeaderView = {
     this.studentTable = document.getElementById('student-table');
     this.tableHeader = document.getElementById('table-thead');
 
-    // on click selectAllOptionBtn store pointer to selectOptionBtns for student records
-    // simulate click of selectAllOptionBtn
-    // use it to call highlightingSelectedRow, and them to studentRecordIndexs to delete them
+    // render tableHeaderView
+    tableHeaderView.render();
+
+    // on click selectAllOptionBtn select all records
     this.tableHeader.addEventListener('click', function(e) {
-      if (e.target.nodeName.toLowerCase() === 'button') {
+      if (e.target.nodeName.toLowerCase() === 'input') {
+        this.selectAllOptionBtn = document.getElementById('select-all-option-btn');
+
         // return HTMLCollection
-        const selectOptionBtns = document.getElementsByClassName('select-option-btn');
-        // begin with i = 1 to ignore selectAllOptionBtn
-        // and auto click selectOptionBtns for student records
-        for (let i = 1; i < selectOptionBtns.length; i++) {
-          selectOptionBtns[i].click();
+        const tableRows = document.getElementsByClassName('student-row');
+        const missedDaysCell = document.getElementsByClassName('missed-col');
+
+        // if selectAllOptionBtn is checked, highligth all records
+        if (this.selectAllOptionBtn.checked) {
+          console.log('true');
+          for (let i = 0; i < tableRows.length; i++) {
+            tableRows[i].classList.add('selected-col');
+            missedDaysCell[i + 1].classList.add('selected-col');
+            // add selected index to octopus
+            octopus.addSelectedIndex(i);
+          }
+          // if selectAllOptionBtn is unchecked, remove highligth for all records
+        } else if (!this.selectAllOptionBtn.checked) {
+          console.log('false');
+          for (let i = 0; i < tableRows.length; i++) {
+            tableRows[i].classList.remove('selected-col');
+            missedDaysCell[i + 1].classList.remove('selected-col');
+          }
         }
       }
     });
-
-    // render tableHeaderView
-    tableHeaderView.render();
   },
 
   render: function() {
@@ -350,8 +365,12 @@ let tableHeaderView = {
     // create name cell in table header
     let nameCell = document.createElement('th');
     // create select student option btn
-    let selectAllOptionBtn = document.createElement('button');
-    selectAllOptionBtn.setAttribute('class', 'select-option-btn option-btn fas fa-align-justify');
+    // let selectAllOptionBtn = document.createElement('button');
+    let selectAllOptionBtn = document.createElement('input');
+    selectAllOptionBtn.setAttribute('type', 'checkbox');
+    selectAllOptionBtn.setAttribute('id', 'select-all-option-btn');
+    selectAllOptionBtn.setAttribute('class', 'select-option-btn option-btn');
+    selectAllOptionBtn.checked = false;
     nameCell.appendChild(selectAllOptionBtn);
     nameCell.appendChild(document.createTextNode('Student Name'));
     nameCell.setAttribute('class', 'name-cell');
@@ -463,6 +482,7 @@ let tableBodyView = {
     for (let row = 1; row <= rows; row++) {
       // create rows and begin at index 0
       let tableRow = this.tableBody.insertRow(row - 1);
+      tableRow.setAttribute('class', 'student-row');
 
       // create student name cells
       let studentName = document.createTextNode(` ${octopus.getStudentData()[row - 1]['name']}`);
