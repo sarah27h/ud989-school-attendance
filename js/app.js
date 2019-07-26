@@ -325,26 +325,42 @@ let tableHeaderView = {
     this.tableHeader.addEventListener('click', function(e) {
       if (e.target.nodeName.toLowerCase() === 'input') {
         this.selectAllOptionBtn = document.getElementById('select-all-option-btn');
-
+        const selectStudentRecordBtn = document.getElementsByClassName('select-option-btn');
+        this.selectAllIcon = document.getElementById('select-all-icon');
         // return HTMLCollection
         const tableRows = document.getElementsByClassName('student-row');
         const missedDaysCell = document.getElementsByClassName('missed-col');
 
-        // if selectAllOptionBtn is checked, highligth all records
+        // if selectAllOptionBtn is checked, highlight all records
         if (this.selectAllOptionBtn.checked) {
+          this.selectAllIcon.classList.add('fa-check-square');
+          this.selectAllIcon.classList.remove('fa-square');
           console.log('true');
           for (let i = 0; i < tableRows.length; i++) {
+            // highlight student records
             tableRows[i].classList.add('selected-col');
             missedDaysCell[i + 1].classList.add('selected-col');
+            // change select btn to checked
+            selectStudentRecordBtn[i + 1].classList.add('fa-check-square');
+            selectStudentRecordBtn[i + 1].classList.remove('fa-square');
             // add selected index to octopus
             octopus.addSelectedIndex(i);
           }
-          // if selectAllOptionBtn is unchecked, remove highligth for all records
+          // if selectAllOptionBtn is unchecked, remove highlight for all records
         } else if (!this.selectAllOptionBtn.checked) {
+          this.selectAllIcon.classList.add('fa-square');
+          this.selectAllIcon.classList.remove('fa-check-square');
           console.log('false');
           for (let i = 0; i < tableRows.length; i++) {
+            // remove highlight for student records
             tableRows[i].classList.remove('selected-col');
             missedDaysCell[i + 1].classList.remove('selected-col');
+            // change select btn to unchecked
+            selectStudentRecordBtn[i + 1].classList.remove('fa-check-square');
+            selectStudentRecordBtn[i + 1].classList.add('fa-square');
+
+            // remove indexs sended to octopus
+            octopus.getSelectedIndex().splice(octopus.getSelectedIndex().indexOf(i), 1);
           }
         }
       }
@@ -365,12 +381,18 @@ let tableHeaderView = {
     // create name cell in table header
     let nameCell = document.createElement('th');
     // create select student option btn
-    // let selectAllOptionBtn = document.createElement('button');
     let selectAllOptionBtn = document.createElement('input');
+    let selectIcon = document.createElement('i'); // this icon represents an alias for default checkbox
+    selectIcon.setAttribute('class', 'fas fa-square');
+    selectIcon.setAttribute('id', 'select-all-icon');
+
     selectAllOptionBtn.setAttribute('type', 'checkbox');
     selectAllOptionBtn.setAttribute('id', 'select-all-option-btn');
-    selectAllOptionBtn.setAttribute('class', 'select-option-btn option-btn');
-    selectAllOptionBtn.checked = false;
+    selectAllOptionBtn.setAttribute('class', 'select-option-btn option-btn fas');
+
+    selectAllOptionBtn.checked = false; // set default for checkbox as unckecked
+
+    nameCell.appendChild(selectIcon);
     nameCell.appendChild(selectAllOptionBtn);
     nameCell.appendChild(document.createTextNode('Student Name'));
     nameCell.setAttribute('class', 'name-cell');
@@ -429,6 +451,8 @@ let tableBodyView = {
     this.tableBody.addEventListener('click', function(e) {
       // check if evt.target is delete student btn
       if (e.target.nodeName.toLowerCase() === 'button') {
+        const selectStudentRecordBtn = document.getElementsByClassName('select-option-btn');
+        console.log(selectStudentRecordBtn);
         // alert('select btn clicked');
         // get clicked student record
         let studentRecordIndex = e.target.parentNode.parentNode.rowIndex - 1;
@@ -437,18 +461,23 @@ let tableBodyView = {
         if (octopus.getSelectedIndex().indexOf(studentRecordIndex) === -1) {
           // add selected index to octopus
           octopus.addSelectedIndex(studentRecordIndex);
-
           // get missedDaysCell in HTML collection
           // based on that its index equal studentRecordIndex + 1
           // because HTML collection start at 0, studentRecordIndexs start at 1
           // HTML collection [th.missed-col, td.missed-col, td.missed-col, td.missed-col, td.missed-col, td.missed-col]
           missedDaysCell = document.getElementsByClassName('missed-col')[studentRecordIndex + 1];
+          // change select btn to checked
+          selectStudentRecordBtn[studentRecordIndex + 1].classList.add('fa-check-square');
+          selectStudentRecordBtn[studentRecordIndex + 1].classList.remove('fa-square');
         } else {
           octopus
             .getSelectedIndex()
             .splice(octopus.getSelectedIndex().indexOf(studentRecordIndex), 1);
           console.log(octopus.getSelectedIndex());
           missedDaysCell = document.getElementsByClassName('missed-col')[studentRecordIndex + 1];
+          // change select btn to unchecked
+          selectStudentRecordBtn[studentRecordIndex + 1].classList.remove('fa-check-square');
+          selectStudentRecordBtn[studentRecordIndex + 1].classList.add('fa-square');
         }
         // highlighting selected row
         highlightingSelectedRow();
@@ -491,7 +520,7 @@ let tableBodyView = {
 
       // create delete student option btn
       let deletOptionBtn = document.createElement('button');
-      deletOptionBtn.setAttribute('class', 'select-option-btn option-btn fas fa-user-check');
+      deletOptionBtn.setAttribute('class', 'select-option-btn option-btn fas fa-square');
       // deletOptionBtn.setAttribute('id', `delete-option-btn${row}`);
       nameCell.appendChild(deletOptionBtn);
 

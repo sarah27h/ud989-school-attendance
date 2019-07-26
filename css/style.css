@@ -80,6 +80,7 @@ th.missed-col {
 }
 
 .name-cell {
+  position: relative;
   text-align: left;
   min-width: 157px; /*set the table column width constant regardless of the amount of text in its cells */
 }
@@ -89,6 +90,18 @@ th.missed-col {
   /* -webkit-box-shadow: 2px 2px 23px 0px rgba(0, 0, 0, 0.56);
   -moz-box-shadow: 2px 2px 23px 0px rgba(0, 0, 0, 0.56);
   box-shadow: 2px 2px 5px 0px rgba(0, 0, 0, 0.56); */
+}
+
+/* select all options */
+#select-all-icon {
+  position: absolute; /* this icon represents an alias for default checkbox */
+  top: 31px;
+  left: 12px;
+  font-size: 24px;
+}
+
+#select-all-option-btn {
+  opacity: 0; /* hide the browser's default checkbox, show alias icon */
 }
 
 /* addStudent view */
