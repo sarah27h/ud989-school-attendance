@@ -7,6 +7,12 @@ body {
   margin: 2em;
 }
 
+.cotained-table {
+  /* add a vertical scroll if student records increase more than 5*/
+  height: 392px;
+  overflow-y: auto;
+}
+
 th {
   background-color: #001f3f;
   color: #fff;
@@ -117,7 +123,7 @@ th.missed-col {
 }
 
 .option-btn {
-  font-size: 3em;
+  font-size: 2.5em;
   color: #ff6347;
   border: 0;
   background: transparent;
