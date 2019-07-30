@@ -11,7 +11,10 @@ body {
   /* add a vertical scroll if student records increase more than 5*/
   height: 392px;
   overflow-y: auto;
-  width: fit-content; /* to adjust vertical scroll position when days num decreased*/
+  /* to adjust vertical scroll position when days num decreased*/
+  /* width: fit-content; */ /* experimental propertry*/
+  display: inline-block; /* change its display to adjust scroll position*/
+  width: auto;
 }
 
 th {
