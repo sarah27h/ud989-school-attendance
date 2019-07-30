@@ -204,6 +204,10 @@ let octopus = {
     tableBodyView.render();
   },
 
+  getDeletedRecords: function() {
+    return model.deletedRecords;
+  },
+
   // update model.selectedIndexs with new selected indexs
   addSelectedIndex: function(selectedIndex) {
     model.selectedIndexs.push(selectedIndex);
@@ -218,7 +222,6 @@ let octopus = {
   // delete student record from our data
   deleteStudent: function() {
     const studentData = model.getAllStudentData();
-
     model.selectedIndexs
       .sort((a, b) => (a > b ? -1 : 1))
       .forEach(recordIndex => {
@@ -227,6 +230,10 @@ let octopus = {
         studentData.splice(recordIndex, 1);
       });
 
+    // activate undoBtn
+    undoDelete.render();
+
+    console.log(octopus.getDeletedRecords());
     // empty selectedIndexs after delete to avoid app conflit
     // avoid old clicked indexs [0, 1]
     //stored with new clicked indexs [0]
@@ -268,6 +275,9 @@ let octopus = {
       tableBodyView.render();
 
       model.deletedRecords = [];
+
+      // deactivate undoBtn
+      undoDelete.render();
     }
   },
 
@@ -532,7 +542,7 @@ let tableBodyView = {
 
       // create delete student option btn
       let deletOptionBtn = document.createElement('button');
-      deletOptionBtn.setAttribute('class', 'select-option-btn option-btn fas fa-square');
+      deletOptionBtn.setAttribute('class', 'select-option-btn option-btn active-btn fas fa-square');
       // deletOptionBtn.setAttribute('id', `delete-option-btn${row}`);
       nameCell.appendChild(deletOptionBtn);
 
@@ -711,6 +721,20 @@ let undoDelete = {
     this.undoBtn.addEventListener('click', function() {
       octopus.undoDelete();
     });
+  },
+
+  render: function() {
+    // if user delete records activate undoBtn
+    // if user doesn't have deleted records deactivate undoBtn
+    if (octopus.getDeletedRecords().length !== 0) {
+      this.undoBtn.classList.remove('disabled-btn');
+      this.undoBtn.classList.add('active-btn');
+      this.undoBtn.removeAttribute('disabled');
+    } else {
+      this.undoBtn.classList.add('disabled-btn');
+      this.undoBtn.classList.remove('active-btn');
+      this.undoBtn.setAttribute('disabled', 'disabled');
+    }
   }
 };
 

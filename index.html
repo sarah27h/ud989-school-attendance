@@ -26,17 +26,17 @@
       </div>
 
       <div id="sort-options">
-        <button id="sort-az-btn" class="option-btn fas fa-sort-alpha-down"></button>
-        <button id="sort-za-btn" class="option-btn fas fa-sort-alpha-down-alt"></button>
-        <button id="sort-19-btn" class="option-btn fas fa-sort-amount-down-alt"></button>
-        <button id="sort-91-btn" class="option-btn fas fa-sort-amount-down"></button>
+        <button id="sort-az-btn" class="option-btn active-btn fas fa-sort-alpha-down"></button>
+        <button id="sort-za-btn" class="option-btn active-btn fas fa-sort-alpha-down-alt"></button>
+        <button id="sort-19-btn" class="option-btn active-btn fas fa-sort-amount-down-alt"></button>
+        <button id="sort-91-btn" class="option-btn active-btn fas fa-sort-amount-down"></button>
       </div>
 
       <!-- add student, update, help view -->
       <div id="options">
         <!-- change days num view -->
         <div class="option-view">
-          <button class="option-btn change-days-btn fas fa-calendar-day"></button>
+          <button class="option-btn active-btn change-days-btn fas fa-calendar-day"></button>
           <div class="option-content hidden" id="days-view">
             <i class="fas fa-caret-up"></i>
             <div class="option-header">
@@ -59,7 +59,7 @@
 
         <!-- add student view -->
         <div class="option-view">
-          <button class="option-btn add-student-btn add-btn fas fa-user-plus"></button>
+          <button class="option-btn active-btn add-student-btn add-btn fas fa-user-plus"></button>
           <div class="option-content hidden" id="add-student-view">
             <i class="fas fa-caret-up"></i>
             <div class="option-header">
@@ -81,7 +81,10 @@
 
         <!-- delet student view -->
         <div class="option-view">
-          <button class="option-btn delete-student-btn fas fa-user-minus"></button>
+          <div class="btn-group">
+            <button class="option-btn active-btn delete-student-btn fas fa-user-minus"></button>
+            <button class="option-btn undo-btn fas fa-undo-alt disabled-btn" disabled></button>
+          </div>
           <div class="option-content hidden" id="delete-student-view">
             <i class="fas fa-caret-up"></i>
             <div class="option-header">
@@ -102,7 +105,7 @@
 
         <!-- help view -->
         <div class="option-view">
-          <button class="option-btn undo-btn fas fa-undo-alt"></button>
+          <!-- <button class="option-btn undo-btn fas fa-undo-alt"></button> -->
           <!-- <button class="option-btn help-btn fas fa-question-circle"></button> -->
           <div class="option-content hidden" id="help-view">
             <i class="fas fa-caret-up"></i>
