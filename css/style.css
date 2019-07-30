@@ -107,14 +107,15 @@ th.missed-col {
 
 /* select all options */
 #select-all-icon {
-  position: absolute; /* this icon represents an alias for default checkbox */
-  top: 31px;
-  left: 12px;
-  font-size: 24px;
+  position: relative; /* this icon represents an alias for default checkbox */
+  top: 2px;
+  left: 17px;
+  font-size: 21px;
 }
 
 #select-all-option-btn {
   opacity: 0; /* hide the browser's default checkbox, show alias icon */
+  margin-right: 14px;
 }
 
 /* addStudent view */
