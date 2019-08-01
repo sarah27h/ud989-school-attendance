@@ -599,6 +599,7 @@ let changeDaysNumView = {
     this.daysNumInput = document.getElementById('days-num');
     this.subtractBtn = document.getElementById('subtract-btn');
     this.increaseBtn = document.getElementById('increase-btn');
+    this.wrongFieldNotify = document.getElementsByClassName('wrong-field-notify')[0];
 
     // 'this' inside the event listener callback
     // will be the element that fired the event which is 'closeBtn'
@@ -618,18 +619,32 @@ let changeDaysNumView = {
       octopus.toggleOptionView.bind(this, this.daysView)
     );
     this.closeOption.addEventListener('click', octopus.toggleOptionView.bind(this, this.daysView));
-
     // on change, get new value
+    // if user input a negative number show notify message
     this.daysNumInput.addEventListener('change', function(e) {
-      let enteredDaysNum = e.target.value;
-      octopus.updateDaysNum(enteredDaysNum);
+      if (e.target.value > 0) {
+        let enteredDaysNum = e.target.value;
+        octopus.updateDaysNum(enteredDaysNum);
+        // remove notify message
+        changeDaysNumView.wrongFieldNotify.classList.add('hidden');
+      } else {
+        // using this.wrongFieldNotify inside 'change' event listener
+        // give this error Cannot read property 'classList' of undefined at HTMLInputElement
+        // as 'this' inside the event listener callback
+        // will be the element that fired the event which is 'this.daysNumInput'
+        // this.wrongFieldNotify.classList.remove('hidden');
+        changeDaysNumView.wrongFieldNotify.classList.remove('hidden');
+      }
     });
 
     // on click, decrease daysNumInput value by 1
     // update daysNum in model using octopus.updateDaysNum()
     this.subtractBtn.addEventListener('click', () => {
       // put a limit for input type
-      this.daysNumInput.value > 1 ? this.daysNumInput.value-- : 1;
+      // if use reach number 1 a notify message appear
+      this.daysNumInput.value > 1
+        ? this.daysNumInput.value--
+        : this.wrongFieldNotify.classList.remove('hidden');
       octopus.updateDaysNum(this.daysNumInput.value);
     });
 
@@ -638,6 +653,8 @@ let changeDaysNumView = {
     this.increaseBtn.addEventListener('click', () => {
       this.daysNumInput.value++;
       octopus.updateDaysNum(this.daysNumInput.value);
+      // remove notify message
+      this.wrongFieldNotify.classList.add('hidden');
     });
   },
   //
@@ -645,6 +662,7 @@ let changeDaysNumView = {
     // set daysNumInput value to be always days num
     // to improve UX every time user want to change days num stop at the last time days num
     this.daysNumInput.setAttribute('value', octopus.getDaysNum());
+    console.log(this.wrongFieldNotify);
   }
 };
 
@@ -656,6 +674,7 @@ let addNewStudentView = {
     this.closeOption = document.getElementsByClassName('option-close-btn')[1];
     this.studentNameInput = document.getElementById('student-name');
     this.addStudentBtn = document.getElementById('add-student');
+    this.emptyFieldNotify = document.getElementsByClassName('empty-field-notify')[0];
 
     // on click open, close addStudentView
     this.addStudentViewBtn.addEventListener(
@@ -670,16 +689,24 @@ let addNewStudentView = {
     // on change, get student name
     // use () => {..} to caputer value of 'this' bound to addStudentView object
     this.addStudentBtn.addEventListener('click', () => {
-      let studentName = this.studentNameInput.value;
-      octopus.addNewStudent(studentName);
-      // clear input to improve UX
-      this.render();
+      // if user enter a name get it
+      // if not a notify message appear
+      if (this.studentNameInput.value.length > 0) {
+        let studentName = this.studentNameInput.value;
+        octopus.addNewStudent(studentName);
+        // clear input to improve UX
+        this.render();
+      } else {
+        this.emptyFieldNotify.classList.remove('hidden');
+      }
     });
   },
 
   render: function() {
     // clear input to improve UX
     this.studentNameInput.value = '';
+    // remove notify message
+    this.emptyFieldNotify.classList.add('hidden');
   }
 };
 

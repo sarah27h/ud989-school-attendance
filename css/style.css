@@ -82,6 +82,12 @@ input {
   background-color: #787777;
 }
 
+.notify {
+  margin-bottom: 0;
+  color: #b90000;
+  font-weight: bold;
+}
+
 /* Column types */
 th.missed-col {
   background-color: #f00;
