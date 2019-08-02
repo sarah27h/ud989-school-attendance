@@ -185,7 +185,7 @@ let octopus = {
     view.classList.toggle('hidden');
     view.classList.toggle('display-flex');
     // add scroll to when click option view
-    octopus.scrollToView();
+    octopus.scrollToView(350, 0);
   },
 
   // add new student to our data
@@ -202,6 +202,11 @@ let octopus = {
 
     // update the DOM elements with the right values
     tableBodyView.render();
+
+    // select, scroll to position of new student
+    octopus.scrollToRecord();
+
+    console.log(octopus.getStudentData().length);
   },
 
   getDeletedRecords: function() {
@@ -274,6 +279,9 @@ let octopus = {
       // render this tableBodyView (update the DOM elements with the right values)
       tableBodyView.render();
 
+      // select, scroll to position of restored records
+      octopus.scrollToRecord(model.deletedRecords);
+
       model.deletedRecords = [];
 
       // deactivate undoBtn
@@ -312,13 +320,32 @@ let octopus = {
   },
 
   // add scroll to when click option view
-  scrollToView: function() {
+  scrollToView: function(top, left) {
     // window.scrollTo(0, 350, { behavior: 'smooth' });
     window.scroll({
-      top: 350,
-      left: 0,
+      top: top,
+      left: left,
       behavior: 'smooth'
     });
+  },
+
+  // scroll, highlight to student record
+  scrollToRecord: function(recordNums = [1]) {
+    // recordNums case of undo delete student will refere to deleted records we want to restore
+    // recordNums = [1] an array of length = 1 case of add new student will refere to last new added record
+    // store pointer for last student record
+    let record = document.getElementsByClassName('student-row');
+    let recordMissedCell = document.getElementsByClassName('missed-col');
+    // to repeate highlight, scroll for restored records
+    for (let i = recordNums.length; i > 0; i--) {
+      record[octopus.getStudentData().length - i].scrollIntoView();
+      record[octopus.getStudentData().length - i].classList.add('highlight-col');
+      recordMissedCell[octopus.getStudentData().length - i + 1].classList.add('highlight-col');
+      setTimeout(() => {
+        record[octopus.getStudentData().length - i].classList.remove('highlight-col');
+        recordMissedCell[octopus.getStudentData().length - i + 1].classList.remove('highlight-col');
+      }, 1000);
+    }
   },
 
   init: function() {

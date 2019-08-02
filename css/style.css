@@ -112,9 +112,16 @@ th.missed-col {
 
 .selected-col {
   background: #dedede;
+  transition: all 1s;
+
   /* -webkit-box-shadow: 2px 2px 23px 0px rgba(0, 0, 0, 0.56);
   -moz-box-shadow: 2px 2px 23px 0px rgba(0, 0, 0, 0.56);
   box-shadow: 2px 2px 5px 0px rgba(0, 0, 0, 0.56); */
+}
+
+.highlight-col {
+  background: #ccebf4;
+  transition: all 1s;
 }
 
 /* select all options */
