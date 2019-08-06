@@ -176,6 +176,7 @@ let octopus = {
 
     // render this tableBodyView (update the DOM elements with the right values)
     tableBodyView.render();
+    tableHeaderView.render();
   },
 
   // used to open, close optionView
@@ -372,7 +373,9 @@ let tableHeaderView = {
 
     // on click selectAllOptionBtn select all records
     this.tableHeader.addEventListener('click', function(e) {
+      alert('header click');
       if (e.target.nodeName.toLowerCase() === 'input') {
+        alert('select all click');
         this.selectAllOptionBtn = document.getElementById('select-all-option-btn');
         const selectStudentRecordBtn = document.getElementsByClassName('select-option-btn');
         this.selectAllIcon = document.getElementById('select-all-icon');
@@ -393,7 +396,10 @@ let tableHeaderView = {
             selectStudentRecordBtn[i + 1].classList.add('fa-check-square');
             selectStudentRecordBtn[i + 1].classList.remove('fa-square');
             // add selected index to octopus
-            octopus.addSelectedIndex(i);
+            // check if this record index was added before to avoid repeating indexes
+            if (octopus.getSelectedIndex().indexOf(i) === -1) {
+              octopus.addSelectedIndex(i);
+            }
           }
           // if selectAllOptionBtn is unchecked, remove highlight for all records
         } else if (!this.selectAllOptionBtn.checked) {
@@ -432,14 +438,23 @@ let tableHeaderView = {
     // create select student option btn
     let selectAllOptionBtn = document.createElement('input');
     let selectIcon = document.createElement('i'); // this icon represents an alias for default checkbox
-    selectIcon.setAttribute('class', 'fas fa-square');
+
+    // every time tableBodyView is render due to a change in attendance days
+    // we to to render tableHeaderView also
+    // check first if there all a selected records selected
+    // set selectIcon checked
+    if (octopus.getSelectedIndex().length === octopus.getStudentData().length) {
+      selectIcon.setAttribute('class', 'fas fa-check-square');
+      selectAllOptionBtn.checked = true; // set default for checkbox as unckecked
+    } else {
+      selectIcon.setAttribute('class', 'fas fa-square');
+      selectAllOptionBtn.checked = false; // set default for checkbox as unckecked
+    }
     selectIcon.setAttribute('id', 'select-all-icon');
 
     selectAllOptionBtn.setAttribute('type', 'checkbox');
     selectAllOptionBtn.setAttribute('id', 'select-all-option-btn');
     selectAllOptionBtn.setAttribute('class', 'select-option-btn option-btn fas');
-
-    selectAllOptionBtn.checked = false; // set default for checkbox as unckecked
 
     nameCell.appendChild(selectIcon);
     nameCell.appendChild(selectAllOptionBtn);
@@ -483,8 +498,10 @@ let tableBodyView = {
     // on change, get cell -> reflect a day in attendenceDays array
     // row index -> reflect student Record
     this.tableBody.addEventListener('change', function(e) {
+      alert(' change');
       // check if evt.target is input
       if (e.target.nodeName.toLowerCase() === 'input') {
+        alert('days checkbox click');
         // Subtract -1 to reflect day index in attendenceDays array
         // Subtract -1 to reflect student Record index in student data
         let rowIndex = e.target.parentNode.parentNode.rowIndex - 1,
@@ -498,8 +515,10 @@ let tableBodyView = {
 
     // on click select student record btn
     this.tableBody.addEventListener('click', function(e) {
+      alert('click');
       // check if evt.target is delete student btn
       if (e.target.nodeName.toLowerCase() === 'button') {
+        alert('btn click');
         const selectStudentRecordBtn = document.getElementsByClassName('select-option-btn');
         console.log(selectStudentRecordBtn);
         // alert('select btn clicked');
@@ -538,6 +557,9 @@ let tableBodyView = {
           missedDaysCell.classList.toggle('selected-col');
         }
       }
+      // every time tableBodyView is render due to a change in attendance days
+      // we to to render tableHeaderView also
+      tableHeaderView.render.call(tableHeaderView);
     });
     // add missed days as property for each student record at first init of app
     octopus.addMissedDaysAsProperty();
@@ -547,7 +569,6 @@ let tableBodyView = {
   },
 
   render: function() {
-    let tableBody = '';
     // rows equal to student records
     let rows = octopus.getStudentData().length;
     let cells = octopus.getDaysNum();
@@ -560,20 +581,63 @@ let tableBodyView = {
     for (let row = 1; row <= rows; row++) {
       // create rows and begin at index 0
       let tableRow = this.tableBody.insertRow(row - 1);
-      tableRow.setAttribute('class', 'student-row');
 
       // create student name cells
       let studentName = document.createTextNode(` ${octopus.getStudentData()[row - 1]['name']}`);
       let nameCell = tableRow.insertCell(0); // insert student name ex 'Alice' at index 0
-      nameCell.setAttribute('class', 'name-cell');
 
       // create delete student option btn
       let deletOptionBtn = document.createElement('button');
-      deletOptionBtn.setAttribute('class', 'select-option-btn option-btn active-btn fas fa-square');
-      // deletOptionBtn.setAttribute('id', `delete-option-btn${row}`);
-      nameCell.appendChild(deletOptionBtn);
 
+      nameCell.setAttribute('class', 'name-cell');
+      nameCell.appendChild(deletOptionBtn);
       nameCell.appendChild(studentName);
+
+      // create days missed cells
+      let daysMissed = document.createTextNode(octopus.getMissedDays()[row - 1].length); // all browsers support it equally without any quirks, it scape all HTML tags
+      let daysMissedCell = tableRow.insertCell(-1); // -1 to insert missed days cell at the last position
+      // daysMissedCell.innerHTML = '0 <span> gg </span>'; // render html-like tags into a DOM
+      // deletOptionBtn.setAttribute('id', `delete-option-btn${row}`);
+      daysMissedCell.appendChild(daysMissed);
+
+      // every time tableBodyView is render due to a change in attendance days
+      // check first if there was a selected records in octopus.getSelectedIndex()
+      // to save the view as it is
+      console.log(octopus.getSelectedIndex(), row);
+      if (octopus.getSelectedIndex().length > 0) {
+        octopus.getSelectedIndex().forEach(index => {
+          if (octopus.getSelectedIndex().indexOf(row - 1)) {
+            console.log(octopus.getSelectedIndex(), row - 1);
+            tableRow.setAttribute('class', 'student-row selected-col');
+            deletOptionBtn.setAttribute(
+              'class',
+              'select-option-btn option-btn active-btn fas fa-check-square'
+            );
+            daysMissedCell.setAttribute('class', 'missed-col selected-col');
+          } else if (octopus.getSelectedIndex().length === octopus.getStudentData().length) {
+            tableRow.setAttribute('class', 'student-row selected-col');
+            deletOptionBtn.setAttribute(
+              'class',
+              'select-option-btn option-btn active-btn fas fa-check-square'
+            );
+            daysMissedCell.setAttribute('class', 'missed-col selected-col');
+          } else {
+            tableRow.setAttribute('class', 'student-row');
+            deletOptionBtn.setAttribute(
+              'class',
+              'select-option-btn option-btn active-btn fas fa-square'
+            );
+            daysMissedCell.setAttribute('class', 'missed-col');
+          }
+        });
+      } else {
+        tableRow.setAttribute('class', 'student-row');
+        deletOptionBtn.setAttribute(
+          'class',
+          'select-option-btn option-btn active-btn fas fa-square'
+        );
+        daysMissedCell.setAttribute('class', 'missed-col');
+      }
 
       // create checkbox cells
       for (let cell = 1; cell <= cells; cell++) {
@@ -591,13 +655,6 @@ let tableBodyView = {
         }
         checkCell.appendChild(checkbox);
       }
-
-      // create days missed cells
-      let daysMissed = document.createTextNode(octopus.getMissedDays()[row - 1].length); // all browsers support it equally without any quirks, it scape all HTML tags
-      let daysMissedCell = tableRow.insertCell(-1); // -1 to insert missed days cell at the last position
-      // daysMissedCell.innerHTML = '0 <span> gg </span>'; // render html-like tags into a DOM
-      daysMissedCell.setAttribute('class', 'missed-col');
-      daysMissedCell.appendChild(daysMissed);
     }
 
     // create table rows using a string to store the HTML
