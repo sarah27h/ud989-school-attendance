@@ -602,34 +602,24 @@ let tableBodyView = {
 
       // every time tableBodyView is render due to a change in attendance days
       // check first if there was a selected records in octopus.getSelectedIndex()
-      // to save the view as it is
-      console.log(octopus.getSelectedIndex(), row);
+      // to save selected records in the view as they are
       if (octopus.getSelectedIndex().length > 0) {
-        octopus.getSelectedIndex().forEach(index => {
-          if (octopus.getSelectedIndex().indexOf(row - 1)) {
-            console.log(octopus.getSelectedIndex(), row - 1);
-            tableRow.setAttribute('class', 'student-row selected-col');
-            deletOptionBtn.setAttribute(
-              'class',
-              'select-option-btn option-btn active-btn fas fa-check-square'
-            );
-            daysMissedCell.setAttribute('class', 'missed-col selected-col');
-          } else if (octopus.getSelectedIndex().length === octopus.getStudentData().length) {
-            tableRow.setAttribute('class', 'student-row selected-col');
-            deletOptionBtn.setAttribute(
-              'class',
-              'select-option-btn option-btn active-btn fas fa-check-square'
-            );
-            daysMissedCell.setAttribute('class', 'missed-col selected-col');
-          } else {
-            tableRow.setAttribute('class', 'student-row');
-            deletOptionBtn.setAttribute(
-              'class',
-              'select-option-btn option-btn active-btn fas fa-square'
-            );
-            daysMissedCell.setAttribute('class', 'missed-col');
-          }
-        });
+        if (octopus.getSelectedIndex().indexOf(row - 1) > -1) {
+          console.log(octopus.getSelectedIndex(), row);
+          tableRow.setAttribute('class', 'student-row selected-col');
+          deletOptionBtn.setAttribute(
+            'class',
+            'select-option-btn option-btn active-btn fas fa-check-square'
+          );
+          daysMissedCell.setAttribute('class', 'missed-col selected-col');
+        } else {
+          tableRow.setAttribute('class', 'student-row');
+          deletOptionBtn.setAttribute(
+            'class',
+            'select-option-btn option-btn active-btn fas fa-square'
+          );
+          daysMissedCell.setAttribute('class', 'missed-col');
+        }
       } else {
         tableRow.setAttribute('class', 'student-row');
         deletOptionBtn.setAttribute(
