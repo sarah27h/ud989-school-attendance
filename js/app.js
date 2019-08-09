@@ -458,8 +458,9 @@ let tableHeaderView = {
 
     nameCell.appendChild(selectIcon);
     nameCell.appendChild(selectAllOptionBtn);
-    nameCell.appendChild(document.createTextNode('Student Name'));
+    nameCell.appendChild(document.createTextNode('Name'));
     nameCell.setAttribute('class', 'name-cell');
+    nameCell.setAttribute('id', 'name');
     headerRows.appendChild(nameCell);
 
     // create days cell in table header
@@ -472,8 +473,9 @@ let tableHeaderView = {
 
     // create missed days cell in table header
     let missedDayscell = document.createElement('th');
-    missedDayscell.appendChild(document.createTextNode('Days Missed-col'));
+    missedDayscell.appendChild(document.createTextNode('Missed Days'));
     missedDayscell.setAttribute('class', 'missed-col');
+    missedDayscell.setAttribute('id', 'missed');
     headerRows.appendChild(missedDayscell);
   }
 };
