@@ -297,21 +297,6 @@ let octopus = {
     }
   },
 
-  ascendSort: function(e) {
-    const studentNames = model.getAllStudentData();
-    // check clicked btn then decide which property will be applied
-    // studentx.name if e.target.id === 'sort-az-btn'
-    // studentx.missed if e.target.id === 'sort-19-btn'
-    e.target.id === 'sort-az-btn'
-      ? studentNames.sort((studentx, studenty) => (studentx.name < studenty.name ? -1 : 1))
-      : studentNames.sort((studentx, studenty) => (studentx.missed < studenty.missed ? -1 : 1));
-
-    // update our array in local storage
-    model.updateStudentData(studentNames);
-    // update the DOM elements with the right values
-    tableBodyView.render();
-  },
-
   // sort columns by name or number asc & desc
   sortColumn: function(columnId) {
     const studentNames = model.getAllStudentData();
@@ -391,21 +376,6 @@ let octopus = {
     previousColumnIdIcon.classList.add('sorting-desc-disabled');
   },
 
-  descendSort: function(e) {
-    const studentNames = model.getAllStudentData();
-    // check clicked btn then decide which property will be applied
-    // studentx.name if e.target.id === 'sort-za-btn'
-    // studentx.missed if e.target.id === 'sort-91-btn'
-    e.target.id === 'sort-za-btn'
-      ? studentNames.sort((studentx, studenty) => (studentx.name > studenty.name ? -1 : 1))
-      : studentNames.sort((studentx, studenty) => (studentx.missed > studenty.missed ? -1 : 1));
-
-    // update our array in local storage
-    model.updateStudentData(studentNames);
-    // update the DOM elements with the right values
-    tableBodyView.render();
-  },
-
   // add scroll to when click option view
   scrollToView: function(top, left) {
     // window.scrollTo(0, 350, { behavior: 'smooth' });
@@ -442,7 +412,6 @@ let octopus = {
     changeDaysNumView.init();
     addNewStudentView.init();
     deleteStudentView.init();
-    sortView.init();
     modalBoxView.init();
     undoDelete.init();
   }
@@ -933,23 +902,6 @@ let undoDelete = {
       this.undoBtn.classList.remove('active-btn');
       this.undoBtn.setAttribute('disabled', 'disabled');
     }
-  }
-};
-
-/* sort options */
-let sortView = {
-  // store pointers to our DOM elements for easy access later
-  init: function() {
-    this.azSortBtn = document.getElementById('sort-az-btn');
-    this.zaSortBtn = document.getElementById('sort-za-btn');
-    this.ascendSortBtn = document.getElementById('sort-19-btn');
-    this.descendSorttBtn = document.getElementById('sort-91-btn');
-
-    // onclick sort students record alphabetic, numeric ascend or descend
-    this.azSortBtn.addEventListener('click', octopus.ascendSort);
-    this.zaSortBtn.addEventListener('click', octopus.descendSort);
-    this.ascendSortBtn.addEventListener('click', octopus.ascendSort);
-    this.descendSorttBtn.addEventListener('click', octopus.descendSort);
   }
 };
 
