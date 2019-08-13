@@ -208,9 +208,11 @@ th.missed-col {
 #options {
   display: flex;
   justify-content: space-between;
+  flex-wrap: wrap;
 }
 
 .option-view {
+  margin-bottom: 20px;
 }
 
 .btn-group {
