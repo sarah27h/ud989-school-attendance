@@ -8,6 +8,13 @@ let model = {
   // to store selected indexs to delete if user click delete btn
   selectedIndexs: [],
 
+  // flag for determine sort type
+  // flase: sort in ascending order default
+  // true: sort in descending order
+  sortFlag: false,
+
+  previousColumnId: '',
+
   // Create attendance records if it hasn't created yet, use local storage to store them
   init: function() {
     if (!localStorage.studentData) {
@@ -23,7 +30,7 @@ let model = {
 
       // create student object
       const studentData = [];
-      this.studentNames.map(function(name) {
+      this.studentNames.sort().map(function(name) {
         const student = {};
         // add student name, addendance days
         student['name'] = name;
@@ -305,6 +312,85 @@ let octopus = {
     tableBodyView.render();
   },
 
+  // sort columns by name or number asc & desc
+  sortColumn: function(columnId) {
+    const studentNames = model.getAllStudentData();
+    const icon = document.getElementById(columnId);
+
+    // check if user click the same column or not
+    octopus.determineSortColumnChange(columnId);
+
+    // check sortFlag to determine sort type asc or desc
+    // flase: sort in ascending order default
+    // true: sort in descending order
+    model.sortFlag
+      ? studentNames.sort((studentx, studenty) =>
+          studentx[columnId] > studenty[columnId] ? -1 : 1
+        )
+      : studentNames.sort((studentx, studenty) =>
+          studentx[columnId] < studenty[columnId] ? -1 : 1
+        );
+    // change sort icon style (before, after pseudo element ) based on sort type asc or desc
+    octopus.changeSortIconStyle(icon);
+
+    // toggle sortFlag value
+    model.sortFlag = !model.sortFlag;
+
+    // update our array in local storage
+    model.updateStudentData(studentNames);
+
+    // update the DOM elements with the right values
+    tableBodyView.render();
+  },
+
+  // check if user click the same column or not
+  determineSortColumnChange: function(columnId) {
+    // user click different column and this not the first time
+    // remove sort icon style for previousColumn
+    // save value for current cloumnId
+    // set sortFlag to its default value to begin sort by asc order
+    if (model.previousColumnId !== columnId && model.previousColumnId.length !== 0) {
+      octopus.removePreviousSortIconStyle(model.previousColumnId);
+      octopus.updatepreviousColumnId(columnId);
+      model.sortFlag = false;
+      // if user click for first time
+    } else if (model.previousColumnId.length === 0) {
+      octopus.updatepreviousColumnId(columnId);
+    }
+  },
+
+  // use previousColumnId to test if user click the same column or not
+  updatepreviousColumnId: function(columnId) {
+    model.previousColumnId = columnId;
+  },
+
+  // change sort icon style (before, after pseudo element ) based on sort type asc or desc
+  changeSortIconStyle: function(icon) {
+    if (model.sortFlag) {
+      icon.classList.add('sorting-desc');
+      icon.classList.remove('sorting-desc-disabled');
+
+      icon.classList.remove('sorting-asc');
+      icon.classList.add('sorting-asc-disabled');
+    } else {
+      icon.classList.add('sorting-asc');
+      icon.classList.remove('sorting-asc-disabled');
+
+      icon.classList.remove('sorting-desc');
+      icon.classList.add('sorting-desc-disabled');
+    }
+  },
+
+  // remove sort icon style for previousColumn if user click different column
+  removePreviousSortIconStyle: function(previousColumnId) {
+    const previousColumnIdIcon = document.getElementById(previousColumnId);
+
+    previousColumnIdIcon.classList.remove('sorting-desc');
+    previousColumnIdIcon.classList.add('sorting-desc-disabled');
+    previousColumnIdIcon.classList.remove('sorting-asc');
+    previousColumnIdIcon.classList.add('sorting-desc-disabled');
+  },
+
   descendSort: function(e) {
     const studentNames = model.getAllStudentData();
     // check clicked btn then decide which property will be applied
@@ -418,6 +504,15 @@ let tableHeaderView = {
             octopus.getSelectedIndex().splice(octopus.getSelectedIndex().indexOf(i), 1);
           }
         }
+      }
+    });
+
+    // on click sorting icons get columnId of clicked column
+    // pass columnId to octopus to sort column
+    this.tableHeader.addEventListener('click', function(e) {
+      if (e.target.nodeName.toLowerCase() === 'th') {
+        const columnId = e.target.id;
+        octopus.sortColumn(columnId);
       }
     });
   },
