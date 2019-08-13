@@ -428,9 +428,7 @@ let tableHeaderView = {
 
     // on click selectAllOptionBtn select all records
     this.tableHeader.addEventListener('click', function(e) {
-      alert('header click');
       if (e.target.nodeName.toLowerCase() === 'input') {
-        alert('select all click');
         this.selectAllOptionBtn = document.getElementById('select-all-option-btn');
         const selectStudentRecordBtn = document.getElementsByClassName('select-option-btn');
         this.selectAllIcon = document.getElementById('select-all-icon');
@@ -564,10 +562,8 @@ let tableBodyView = {
     // on change, get cell -> reflect a day in attendenceDays array
     // row index -> reflect student Record
     this.tableBody.addEventListener('change', function(e) {
-      alert(' change');
       // check if evt.target is input
       if (e.target.nodeName.toLowerCase() === 'input') {
-        alert('days checkbox click');
         // Subtract -1 to reflect day index in attendenceDays array
         // Subtract -1 to reflect student Record index in student data
         let rowIndex = e.target.parentNode.parentNode.rowIndex - 1,
@@ -581,13 +577,11 @@ let tableBodyView = {
 
     // on click select student record btn
     this.tableBody.addEventListener('click', function(e) {
-      alert('click');
       // check if evt.target is delete student btn
       if (e.target.nodeName.toLowerCase() === 'button') {
-        alert('btn click');
         const selectStudentRecordBtn = document.getElementsByClassName('select-option-btn');
         console.log(selectStudentRecordBtn);
-        // alert('select btn clicked');
+
         // get clicked student record
         let studentRecordIndex = e.target.parentNode.parentNode.rowIndex - 1;
 
@@ -861,7 +855,6 @@ let deleteStudentView = {
 
     // on click delete selected records
     deleteStudentView.deleteStudentBtn.addEventListener('click', function() {
-      // alert('clicked');
       octopus.deleteStudent();
       console.log('delete confirm', octopus.getSelectedIndex());
       studentRecordIndexs = [];
