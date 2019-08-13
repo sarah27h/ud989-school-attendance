@@ -19,9 +19,9 @@ body {
 }
 
 th {
-  background-color: #001f3f;
+  background-color: #979797;
   color: #fff;
-  padding: 0.5em 1em;
+  padding: 0.5em;
   /* fix header of table */
   position: sticky;
   top: 0;
@@ -97,7 +97,8 @@ th.missed-col {
 .missed-col {
   background-color: #ffecec;
   color: #f00;
-  text-align: center;
+  text-align: left;
+  min-width: 125px;
 }
 
 .name-col {
@@ -107,7 +108,7 @@ th.missed-col {
 .name-cell {
   /* position: relative; */
   text-align: left;
-  min-width: 157px; /*set the table column width constant regardless of the amount of text in its cells */
+  min-width: 115px; /*set the table column width constant regardless of the amount of text in its cells */
 }
 
 .selected-col {
@@ -144,6 +145,45 @@ th.missed-col {
   flex-wrap: nowrap;
   justify-content: space-between;
 }
+#missed,
+#name {
+  position: relative;
+  cursor: pointer;
+}
+
+#missed:after,
+#name:after,
+#missed.sorting-desc-disabled:after,
+#name.sorting-desc-disabled:after {
+  content: '\f0dd';
+  opacity: 0.3;
+}
+
+#missed:before,
+#name:before,
+#missed.sorting-asc-disabled:before,
+#name.sorting-asc-disabled:before {
+  content: '\f0de';
+  opacity: 0.3;
+}
+
+#missed.sorting-asc:before,
+#missed.sorting-desc:after,
+#name.sorting-desc:after,
+#name.sorting-asc:before {
+  opacity: 1;
+}
+
+#missed:after,
+#name:after,
+#missed:before,
+#name:before {
+  font-family: 'Font Awesome\ 5 Free';
+  position: absolute;
+  right: 25px;
+  font-size: 20px;
+  color: #001f3f;
+}
 
 .option-btn {
   font-size: 2.5em;
@@ -168,11 +208,9 @@ th.missed-col {
 #options {
   display: flex;
   justify-content: space-between;
-  flex-wrap: wrap;
 }
 
 .option-view {
-  margin-bottom: 20px;
 }
 
 .btn-group {
