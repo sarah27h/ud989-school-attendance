@@ -151,16 +151,27 @@ th.missed-col {
   cursor: pointer;
 }
 
+#missed:after,
+#name:after,
+#missed.sorting-desc-disabled:after,
+#name.sorting-desc-disabled:after {
+  content: '\f0dd';
+  opacity: 0.3;
+}
+
 #missed:before,
-#name:before {
+#name:before,
+#missed.sorting-asc-disabled:before,
+#name.sorting-asc-disabled:before {
   content: '\f0de';
   opacity: 0.3;
 }
 
-#missed:after,
-#name:after {
-  content: '\f0dd';
-  opacity: 0.3;
+#missed.sorting-asc:before,
+#missed.sorting-desc:after,
+#name.sorting-desc:after,
+#name.sorting-asc:before {
+  opacity: 1;
 }
 
 #missed:after,
