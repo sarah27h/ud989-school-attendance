@@ -119,7 +119,7 @@ let octopus = {
   },
 
   // count a student's missed days
-  getMissedDays: function() {
+  getSudentsMissedDays: function() {
     const missedDays = model.getAllStudentData().map(student => {
       return student['attendanceDays'].filter(day => {
         return !day ? !day : 0;
@@ -140,6 +140,9 @@ let octopus = {
       student['attendanceDays'].length = enteredDaysNum;
       model.updateStudentData(students);
     });
+
+    // update missed in local storage after user change numDays
+    octopus.addMissedDaysAsProperty();
   },
 
   // count missed days and add as property using pass student index and missed
@@ -654,7 +657,7 @@ let tableBodyView = {
       nameCell.appendChild(studentName);
 
       // create days missed cells
-      let daysMissed = document.createTextNode(octopus.getMissedDays()[row - 1].length); // all browsers support it equally without any quirks, it scape all HTML tags
+      let daysMissed = document.createTextNode(octopus.getSudentsMissedDays()[row - 1].length); // all browsers support it equally without any quirks, it scape all HTML tags
       let daysMissedCell = tableRow.insertCell(-1); // -1 to insert missed days cell at the last position
       // daysMissedCell.innerHTML = '0 <span> gg </span>'; // render html-like tags into a DOM
       // deletOptionBtn.setAttribute('id', `delete-option-btn${row}`);
