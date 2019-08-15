@@ -147,7 +147,6 @@ th.missed-col {
 }
 #missed,
 #name {
-  position: relative;
   cursor: pointer;
 }
 
