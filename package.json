@@ -1,0 +1,28 @@
+{
+  "name": "ud989-school-attendance-mvo",
+  "version": "1.0.0",
+  "description": "this app built using MVO pattern",
+  "main": "index.js",
+  "dependencies": {},
+  "devDependencies": {
+    "@babel/cli": "^7.5.5",
+    "@babel/core": "^7.5.5",
+    "@babel/preset-env": "^7.5.5"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "scripts": {
+    "build": "babel js -d dist"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sarah27h/ud989-school-attendance.git"
+  },
+  "author": "sarah",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/sarah27h/ud989-school-attendance/issues"
+  },
+  "homepage": "https://github.com/sarah27h/ud989-school-attendance#readme"
+}
