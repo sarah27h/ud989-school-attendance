@@ -38,7 +38,7 @@ input {
 }
 
 .container {
-  margin: 0 auto;
+  margin-left: 40px;
   max-width: 852px;
 }
 
@@ -385,6 +385,10 @@ th.missed-col {
 /* media queries */
 /* for medium, small screens */
 @media screen and (max-width: 774px) {
+  .container {
+    margin: 0 auto;
+  }
+
   /* table container */
   .cotained-table {
     width: 100%;
