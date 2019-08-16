@@ -151,7 +151,8 @@ let octopus = {
     model.getAllStudentData().forEach((student, index, arr) => {
       let missed = 0;
       student['attendanceDays'].map(day => {
-        if (day === false) {
+        // update missed in local storage after user change numDays
+        if (day === false || day === null) {
           missed++;
         }
       });
