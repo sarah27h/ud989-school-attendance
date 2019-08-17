@@ -14,7 +14,7 @@ I have used the burn-it method because this code is very bad to be fixed, I have
 
 ## Screen Cast
 
-![GIF showing how attendance app work](https://j.gifs.com/k8D815.gif)
+![GIF showing how attendance app work](https://raw.githubusercontent.com/sarah27h/ud989-school-attendance/master/attendance-app.gif)
 
 ## MVO
 
